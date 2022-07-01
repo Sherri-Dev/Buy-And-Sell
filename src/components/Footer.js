@@ -17,6 +17,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import CopyrightIcon from "@mui/icons-material/Copyright";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import Categories from "./Categories";
 
 const Footer = () => {
   return (
@@ -136,50 +137,7 @@ const Footer = () => {
                 >
                   Categories
                 </ListSubheader>
-                <ListItem disablePadding>
-                  <ListItemButton
-                    sx={{
-                      color: "#979797",
-                      fontFamily: "Poppins",
-                      fontSize: { xs: "1rem", mb: "1.1rem" },
-                    }}
-                  >
-                    Animals
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemButton
-                    sx={{
-                      color: "#979797",
-                      fontFamily: "Poppins",
-                      fontSize: { xs: "1rem", mb: "1.1rem" },
-                    }}
-                  >
-                    Animals
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemButton
-                    sx={{
-                      color: "#979797",
-                      fontFamily: "Poppins",
-                      fontSize: { xs: "1rem", mb: "1.1rem" },
-                    }}
-                  >
-                    Animals
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemButton
-                    sx={{
-                      color: "#979797",
-                      fontFamily: "Poppins",
-                      fontSize: { xs: "1rem", mb: "1.1rem" },
-                    }}
-                  >
-                    Animals
-                  </ListItemButton>
-                </ListItem>
+                <Categories />
               </List>
             </Box>
             <Box sx={{ flexBasis: { sm: "100%" } }}>

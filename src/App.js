@@ -3,7 +3,6 @@ import { createTheme } from "@mui/material";
 import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
-import TopBar from "./components/TopBar";
 import Home from "./pages/Home";
 import SearchResults from "./pages/SearchResults";
 
@@ -56,7 +55,7 @@ function App() {
             path="/"
             element={
               <>
-                <Header setHeaderHeight={setHeaderHeight} transparent={true} />
+                <Header setHeaderHeight={setHeaderHeight} transparent={false} />
                 <Home headerHeight={headerHeight} />
               </>
             }

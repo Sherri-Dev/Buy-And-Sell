@@ -11,7 +11,7 @@ import PostAddIcon from "@mui/icons-material/PostAdd";
 import Typography from "@mui/material/Typography";
 import { keyframes } from "@mui/system";
 import { Box } from "@mui/system";
-import Heading from "./Heading";
+import Heading from "../../components/Heading";
 import { Container } from "@mui/material";
 
 const Work = () => {

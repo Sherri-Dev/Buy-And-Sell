@@ -1,16 +1,10 @@
-import {
-  Box,
-  TextField,
-  Typography,
-  alpha,
-  Button,
-  Autocomplete,
-} from "@mui/material";
+import { Box, TextField, Typography, alpha, Autocomplete } from "@mui/material";
 import { Container } from "@mui/system";
 import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import LocationSearchingIcon from "@mui/icons-material/LocationSearching";
-import CategoryAds from "./CategoryAds";
+import CategoryAds from "../../components/CategoryAds";
+import Btn from "../../components/Btn";
 
 const HomeBanner = ({ headerHeight }) => {
   return (
@@ -103,7 +97,6 @@ const HomeBanner = ({ headerHeight }) => {
                   >
                     <SearchIcon
                       sx={{
-                        color: "action.active",
                         mr: 1,
                         color: "primary.main",
                         alignSelf: "center",
@@ -139,7 +132,6 @@ const HomeBanner = ({ headerHeight }) => {
                   >
                     <LocationSearchingIcon
                       sx={{
-                        color: "action.active",
                         mr: 1,
                         color: "primary.main",
                         alignSelf: "center",
@@ -181,21 +173,17 @@ const HomeBanner = ({ headerHeight }) => {
                       fullWidth
                     />
                   </Box>
-                  <Button
-                    type="submit"
+
+                  <Btn
+                    text={"Search"}
                     sx={{
                       fontSize: "18px",
                       paddingInline: "2rem",
                       width: { xs: "100%", md: "30%" },
-                      "&:hover": {
-                        backgroundColor: "secondary.main",
-                        color: "white",
-                      },
                     }}
                     variant="contained"
-                  >
-                    Search
-                  </Button>
+                    type="submit"
+                  />
                 </Box>
               </Box>
             </Box>

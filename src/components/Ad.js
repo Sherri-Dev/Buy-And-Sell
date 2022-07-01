@@ -16,14 +16,14 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { Box } from "@mui/system";
 
-const Ad = ({ variant }) => {
+const Ad = ({ variant, size, borderRadius, elevation }) => {
   return variant === 1 ? (
     <Card
       sx={{
         backgroundColor: "secondary.main",
         height: "280px",
         position: "relative",
-        borderRadius: "6px",
+        borderRadius: borderRadius || "6px",
         ".css-dcnb5z-MuiCardMedia-root:before": {
           content: `''`,
           position: "absolute",
@@ -35,7 +35,7 @@ const Ad = ({ variant }) => {
             "linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.2) 100%)",
         },
       }}
-      elevation={5}
+      elevation={elevation || 5}
     >
       <CardMedia
         image="https://adforestpro.scriptsbundle.com/wp-content/uploads/2021/09/278606-1-850x450-2-300x224.png"
@@ -49,6 +49,7 @@ const Ad = ({ variant }) => {
                 top: "14px",
                 left: "-1.7rem",
                 width: "7rem",
+                fontSize: size === "small" ? "0.865rem" : "0.875rem",
                 textAlign: "center",
                 color: "white",
                 backgroundColor: "red",
@@ -67,6 +68,7 @@ const Ad = ({ variant }) => {
                 aria-label="add to favorites"
                 sx={{
                   backgroundColor: "white",
+                  padding: size === "small" ? "6px" : "8px",
                   "&:hover": {
                     backgroundColor: "white",
                     transition: "background-color 0.5s ease",
@@ -94,7 +96,12 @@ const Ad = ({ variant }) => {
           <Typography
             variant="subtitle1"
             color="primary"
-            sx={{ fontSize: { xs: "17px", sm: "19px" } }}
+            sx={{
+              fontSize:
+                size === "small"
+                  ? { xs: "17px", sm: "19px" }
+                  : { xs: "14px", sm: "16px" },
+            }}
           >
             $75000.00 (Negotiable)
           </Typography>
@@ -102,7 +109,10 @@ const Ad = ({ variant }) => {
             variant="h5"
             sx={{
               fontWeight: "500",
-              fontSize: { xs: "23px", sm: "25px" },
+              fontSize:
+                size === "small"
+                  ? { xs: "20px", sm: "22px" }
+                  : { xs: "23px", sm: "25px" },
               color: "white",
             }}
             noWrap
@@ -116,12 +126,17 @@ const Ad = ({ variant }) => {
             spacing={1}
             sx={{ color: "white", mt: "0.7rem", position: "relative" }}
           >
-            <LocationOnIcon sx={{}} />
+            <LocationOnIcon
+              sx={{ fontSize: size === "small" ? "1.3rem" : "1.5rem" }}
+            />
             <Typography
               variant="subtitle1"
               sx={{
                 fontWeight: "normal",
-                fontSize: { xs: "16px", sm: "18px" },
+                fontSize:
+                  size === "small"
+                    ? { xs: "14px", sm: "16px" }
+                    : { xs: "16px", sm: "18px" },
               }}
               noWrap
             >
@@ -149,12 +164,17 @@ const Ad = ({ variant }) => {
               spacing={1}
               sx={{ color: "#cfcfcf" }}
             >
-              <AccessTimeIcon sx={{}} />
+              <AccessTimeIcon
+                sx={{ fontSize: size === "small" ? "1.3rem" : "1.5rem" }}
+              />
               <Typography
                 variant="subtitle1"
                 sx={{
                   fontWeight: "normal",
-                  fontSize: { xs: "14px", sm: "16px" },
+                  fontSize:
+                    size === "small"
+                      ? { xs: "12px", sm: "14px" }
+                      : { xs: "14px", sm: "16px" },
                 }}
               >
                 September 30,2022

@@ -19,7 +19,8 @@ const TopBar = ({ sx }) => {
   return (
     <Box
       sx={{
-        backgroundColor: "#2F2F2F",
+        backgroundColor: "#eee",
+        boxShadow: 1,
         color: "white",
         padding: "0.5rem 0",
         flexGrow: 1,
@@ -27,7 +28,10 @@ const TopBar = ({ sx }) => {
       }}
     >
       <Container>
-        <Breadcrumbs aria-label="breadcrumb" sx={{ color: "white" }}>
+        <Breadcrumbs
+          aria-label="breadcrumb"
+          sx={{ color: "black", fontSize: { xs: "14px", sm: "16px" } }}
+        >
           <LinkRouter underline="hover" sx={{ color: "text.secondary" }} to="/">
             Home
           </LinkRouter>
@@ -36,12 +40,18 @@ const TopBar = ({ sx }) => {
             const to = `/${pathnames.slice(0, index + 1).join("/")}`;
 
             return last ? (
-              <Typography color="inherit" key={to}>
+              <Typography color="inherit" key={to} fontSize="inherit">
                 {" "}
                 {breadcrumbNameMap[to]}
               </Typography>
             ) : (
-              <LinkRouter underline="hover" color="inherit" to={to} key={to}>
+              <LinkRouter
+                underline="hover"
+                color="inherit"
+                fontSize="inherit"
+                to={to}
+                key={to}
+              >
                 {" "}
                 {breadcrumbNameMap[to]}
               </LinkRouter>

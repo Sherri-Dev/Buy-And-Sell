@@ -1,8 +1,9 @@
-import { Box, Button, Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { Container } from "@mui/system";
 import React from "react";
-import Ad from "./Ad";
-import Heading from "./Heading";
+import Ad from "../../components/Ad";
+import Btn from "../../components/Btn";
+import Heading from "../../components/Heading";
 
 const FeaturedAds = () => {
   return (
@@ -23,23 +24,18 @@ const FeaturedAds = () => {
             );
           })}
         </Grid>
-        <Button
-          variant="contained"
+
+        <Btn
+          text="View All"
           sx={{
             textTransform: "capitalize",
             display: "block",
             mt: { xs: "2rem", sm: "2.5rem", md: "3rem" },
             mx: "auto",
-
-            "&:hover": {
-              backgroundColor: "secondary.main",
-              color: "white",
-            },
           }}
           size="large"
-        >
-          View All
-        </Button>
+          variant="contained"
+        />
       </Container>
     </Box>
   );

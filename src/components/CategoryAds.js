@@ -1,7 +1,8 @@
 import { Avatar, Box, Chip, Typography } from "@mui/material";
 import React from "react";
 import { Tab, Tabs } from "@mui/material";
-import { alpha } from "@mui/system";
+import categories from "../ctgs.json";
+import { Link } from "react-router-dom";
 const CategoryAds = () => {
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
@@ -28,10 +29,12 @@ const CategoryAds = () => {
       indicatorColor="transparent"
       variant="scrollable"
     >
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((cat, i) => {
+      {categories.map((cat, i) => {
         return (
           <Tab
             key={i}
+            component={Link}
+            to="/search-results"
             icon={
               <Box
                 sx={{
@@ -51,9 +54,12 @@ const CategoryAds = () => {
               </Box>
             }
             sx={{
-              color: "white",
+              color: "white !important",
               gap: "0.25rem",
               padding: { xs: "8px", sm: "10px", md: "20px" },
+              "& :hover": {
+                color: "primary.main",
+              },
             }}
             iconPosition="start"
             label={
@@ -73,7 +79,7 @@ const CategoryAds = () => {
                     textTransform: "capitalize",
                   }}
                 >
-                  Animals
+                  {cat}
                 </Typography>
                 <Chip
                   label="6 Ads"

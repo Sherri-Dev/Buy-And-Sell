@@ -16,6 +16,7 @@ import { Box, Container } from "@mui/system";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { useTheme } from "@emotion/react";
+import Btn from "./Btn";
 
 const Header = ({ setHeaderHeight, transparent }) => {
   const header = useRef();
@@ -43,7 +44,7 @@ const Header = ({ setHeaderHeight, transparent }) => {
           padding: "0.7rem 0",
           borderBottom: "grey 1px solid",
           transition: "background-color 0.5s ease",
-          backgroundColor: `${transparent ? "transparent" : "white"}`,
+          backgroundColor: `${transparent ? "transparent" : "secondary.main"}`,
           position: "fixed",
           top: 0,
           zIndex: theme.zIndex.drawer + 1,
@@ -64,7 +65,7 @@ const Header = ({ setHeaderHeight, transparent }) => {
               fontWeight={"bold"}
               sx={{
                 mb: { xs: 2, sm: 0 },
-                color: `${transparent ? "white" : "black"}`,
+                color: `${transparent ? "white" : "white"}`,
               }}
             >
               Buy and Sell
@@ -102,23 +103,17 @@ const Header = ({ setHeaderHeight, transparent }) => {
                   />
                 </IconButton>
               </Tooltip>
-              <Button
-                startIcon={<AddIcon sx={{ mr: "-6px" }} />}
-                variant="contained"
+              <Btn
+                text={"Post Ad"}
                 sx={{
                   fontSize: { xs: "0.9em", mb: "1rem" },
-
                   padding: { xs: "6px 16px", mb: "7px 22px" },
                   borderRadius: "999px",
                   gap: 0,
-                  "&:hover": {
-                    backgroundColor: "secondary.main",
-                    color: "white",
-                  },
                 }}
-              >
-                Post Ad
-              </Button>
+                startIcon={<AddIcon sx={{ mr: "-6px" }} />}
+                variant="contained"
+              />
             </Box>
           </Toolbar>
         </Container>
@@ -142,5 +137,4 @@ const Header = ({ setHeaderHeight, transparent }) => {
     </>
   );
 };
-
 export default Header;

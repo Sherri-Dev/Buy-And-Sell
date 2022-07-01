@@ -9,6 +9,7 @@
   background-color: rgba(0, 0, 0, 0.582) !important;
   animation: slideIn 0.3s ease-in forwards;
   border-color: transparent !important;
+  box-shadow: 0 1px 10px 0px rgb(141 141 141) !important;
 }
 .scrolled-show-header h6 {
   color: rgb(255, 255, 255);
