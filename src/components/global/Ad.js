@@ -15,8 +15,13 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { Box } from "@mui/system";
+import { Link } from "react-router-dom";
+import { getImages } from "../../helpers/formatApi";
 
-const Ad = ({ variant, size, borderRadius, elevation }) => {
+const Ad = ({ content, variant, size, borderRadius, elevation }) => {
+
+  const isFeatured = content.categories.data.find(ctg => ctg.attributes.name === "featured")
+
   return variant === 1 ? (
     <Card
       sx={{
@@ -38,12 +43,12 @@ const Ad = ({ variant, size, borderRadius, elevation }) => {
       elevation={elevation || 5}
     >
       <CardMedia
-        image="https://adforestpro.scriptsbundle.com/wp-content/uploads/2021/09/278606-1-850x450-2-300x224.png"
+        image={`${process.env.REACT_APP_BACKEND_URL}${getImages(content.images, "thumbnail")[0].url}`}
         sx={{ height: "100%", position: "relative" }}
       >
         <CardHeader
           avatar={
-            <Typography
+            isFeatured && <Typography
               sx={{
                 position: "absolute",
                 top: "14px",
@@ -99,13 +104,15 @@ const Ad = ({ variant, size, borderRadius, elevation }) => {
             sx={{
               fontSize:
                 size === "small"
-                  ? { xs: "17px", sm: "19px" }
-                  : { xs: "14px", sm: "16px" },
+                  ? { xs: "14px", sm: "16px" }
+                  : { xs: "17px", sm: "19px" },
             }}
           >
-            $75000.00 (Negotiable)
+            {`${content?.price.currency} ${content?.price.value} (${content?.price.tag})`}
           </Typography>
           <Typography
+            component={Link}
+            to="/1"
             variant="h5"
             sx={{
               fontWeight: "500",
@@ -114,10 +121,14 @@ const Ad = ({ variant, size, borderRadius, elevation }) => {
                   ? { xs: "20px", sm: "22px" }
                   : { xs: "23px", sm: "25px" },
               color: "white",
+              textDecoration: "none",
+              "&:hover": {
+                color: "primary.main",
+              },
             }}
             noWrap
           >
-            3 Kanal Brand New Villa
+            {content.title}
           </Typography>
 
           <Stack
@@ -140,7 +151,7 @@ const Ad = ({ variant, size, borderRadius, elevation }) => {
               }}
               noWrap
             >
-              Lorem ipsum dolor sit amet.
+              {content.address}
             </Typography>
           </Stack>
           <Divider
@@ -176,8 +187,9 @@ const Ad = ({ variant, size, borderRadius, elevation }) => {
                       ? { xs: "12px", sm: "14px" }
                       : { xs: "14px", sm: "16px" },
                 }}
+                noWrap
               >
-                September 30,2022
+                {new Date(content.publishedAt).toDateString()}
               </Typography>
             </Stack>{" "}
             <Tooltip
@@ -193,7 +205,7 @@ const Ad = ({ variant, size, borderRadius, elevation }) => {
           </Box>
         </CardContent>
       </CardMedia>
-    </Card>
+    </Card >
   ) : variant === 2 ? (
     <Card sx={{ position: "relative" }} elevation={5}>
       <CardHeader
@@ -237,12 +249,15 @@ const Ad = ({ variant, size, borderRadius, elevation }) => {
       <CardMedia
         image="https://adforestpro.scriptsbundle.com/wp-content/uploads/2021/09/278606-1-850x450-2-300x224.png"
         sx={{ height: "200px" }}
+        component={Link}
+        to="/1"
       />
       <CardContent
         sx={{
           width: "100%",
           backgroundColor: "secondary.main",
           postion: "relative",
+          display: "block",
         }}
       >
         <Typography
@@ -310,6 +325,7 @@ const Ad = ({ variant, size, borderRadius, elevation }) => {
                 fontWeight: "normal",
                 fontSize: { xs: "14px", sm: "16px" },
               }}
+              noWrap
             >
               September 30,2022
             </Typography>

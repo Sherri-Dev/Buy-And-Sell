@@ -5,10 +5,6 @@ import { Box, Link, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import { useTheme } from "@emotion/react";
 
-const breadcrumbNameMap = {
-  "/search-results": " Search Results",
-};
-
 const LinkRouter = (props) => <Link {...props} component={RouterLink} />;
 
 const TopBar = ({ sx }) => {
@@ -16,11 +12,15 @@ const TopBar = ({ sx }) => {
   const pathnames = location.pathname.split("/").filter((x) => x);
   const theme = useTheme();
 
+  const breadcrumbNameMap = (id) => ({
+    "/search-results": " Search Results",
+    [`/${id}`]: "Ad Details / Title",
+  });
+
   return (
     <Box
       sx={{
         backgroundColor: "#eee",
-        boxShadow: 1,
         color: "white",
         padding: "0.5rem 0",
         flexGrow: 1,
@@ -42,7 +42,7 @@ const TopBar = ({ sx }) => {
             return last ? (
               <Typography color="inherit" key={to} fontSize="inherit">
                 {" "}
-                {breadcrumbNameMap[to]}
+                {breadcrumbNameMap(1)[to]}
               </Typography>
             ) : (
               <LinkRouter
@@ -53,7 +53,7 @@ const TopBar = ({ sx }) => {
                 key={to}
               >
                 {" "}
-                {breadcrumbNameMap[to]}
+                {breadcrumbNameMap(1)[to]}
               </LinkRouter>
             );
           })}

@@ -3,17 +3,18 @@ import { Container } from "@mui/system";
 import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import LocationSearchingIcon from "@mui/icons-material/LocationSearching";
-import CategoryAds from "../../components/CategoryAds";
-import Btn from "../../components/Btn";
+import Btn from "../components/shared/Btn";
+import Categories from "../components/shared/Categories";
+import { getImg } from "../helpers/formatApi";
 
-const HomeBanner = ({ headerHeight }) => {
+const HomeBanner = ({ content, headerHeight }) => {
   return (
     <Box
       component={"section"}
       sx={{
         height: "100%",
         background:
-          "url('https://adforestpro.scriptsbundle.com/wp-content/uploads/2021/12/adforestpro-hero-1.jpg') center center/cover",
+          `url(http://localhost:1337${getImg(content.bgImage).url}) center center/cover`,
       }}
     >
       <Box
@@ -48,7 +49,7 @@ const HomeBanner = ({ headerHeight }) => {
                 fontWeight={"normal"}
                 gutterBottom
               >
-                More Than 174.0000 Ads Listing
+                {content.heading.subTitle}
               </Typography>
               <Typography
                 color="white"
@@ -56,7 +57,7 @@ const HomeBanner = ({ headerHeight }) => {
                 sx={{
                   fontSize: {
                     xs: "25px",
-                    mb: "30px",
+                    mob: "30px",
                     sm: "45px",
                     md: "60px",
                     lg: "75px",
@@ -65,13 +66,13 @@ const HomeBanner = ({ headerHeight }) => {
                 fontWeight={"600"}
                 gutterBottom
               >
-                Best Classified Website
+                {content.heading.title}
               </Typography>
               <Box
                 sx={{
                   backgroundColor: alpha("#000", 0.5),
                   borderRadius: "10px",
-                  padding: { xs: "0.5rem", mb: "1rem" },
+                  padding: { xs: "0.5rem", mob: "1rem" },
                   boxShadow: "0 0 1px 2px white",
                   mt: { xs: "1.5rem", sm: "2.5rem" },
                 }}
@@ -103,9 +104,9 @@ const HomeBanner = ({ headerHeight }) => {
                       }}
                     />
                     <TextField
-                      label="What are you looking for"
+                      label={content?.searchForm?.input?.label}
                       inputProps={{
-                        placeholder: "Keyword like car, mobile, furniture etc",
+                        placeholder: content?.searchForm?.input?.placeholder,
                         sx: {
                           height: "100%",
                           color: "white",
@@ -120,7 +121,7 @@ const HomeBanner = ({ headerHeight }) => {
                         },
                       }}
                       fullWidth
-                      variant="filled"
+                      variant="standard"
                     />
                   </Box>
                   <Box
@@ -138,21 +139,19 @@ const HomeBanner = ({ headerHeight }) => {
                       }}
                     />
                     <Autocomplete
-                      options={["Karachi", "Islamabad", "Lahore"]}
+                      options={content?.searchForm?.selectBox?.options?.data?.map(item => item.attributes.name)}
                       renderInput={(params) => (
                         <TextField
                           {...params}
                           inputProps={{
                             ...params.inputProps,
-                            placeholder:
-                              "Keyword like car, mobile, furniture etc",
                             sx: {
                               height: "100%",
                               color: "white",
                               borderBottom: "2px solid grey",
                             },
                           }}
-                          label="Where"
+                          label={content?.searchForm?.selectBox?.label}
                           variant="standard"
                           InputLabelProps={{
                             ...params.InputLabelProps,
@@ -175,14 +174,14 @@ const HomeBanner = ({ headerHeight }) => {
                   </Box>
 
                   <Btn
-                    text={"Search"}
+                    text={content?.searchForm?.submitBtn?.label}
                     sx={{
                       fontSize: "18px",
                       paddingInline: "2rem",
                       width: { xs: "100%", md: "30%" },
                     }}
                     variant="contained"
-                    type="submit"
+                    type={"submit"}
                   />
                 </Box>
               </Box>
@@ -191,7 +190,7 @@ const HomeBanner = ({ headerHeight }) => {
         </Container>
       </Box>
       <Container>
-        <CategoryAds />
+        <Categories variant={"tabs"} content={content?.categories?.data} />
       </Container>
     </Box>
   );

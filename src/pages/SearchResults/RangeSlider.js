@@ -1,22 +1,24 @@
 import { Slider, Stack, TextField, Typography } from "@mui/material";
-import { useState } from "react";
-import Btn from "../../components/Btn";
+import { useContext } from "react";
+import Btn from "../../components/shared/Btn";
+import { FiltersContext } from "../../contexts/filtersContext";
 
 const RangeSlider = () => {
   const min = 0;
   const max = 10000;
-  const [value, setValue] = useState([min, max]);
+  const { state: filtersState, dispatch: dispatchValue } =
+    useContext(FiltersContext);
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    dispatchValue({ type: "PRICE", payload: newValue });
   };
 
   const handleInputChange = (e) => {
     switch (e.target.id) {
       case "minInput":
-        setValue([Number(e.target.value), value[1]]);
+        dispatchValue({ type: "PRICE", payload: [Number(e.target.value), filtersState.priceRange[1]] });
         break;
       case "maxInput":
-        setValue([value[0], Number(e.target.value)]);
+        dispatchValue({ type: "PRICE", payload: [filtersState.priceRange[0], Number(e.target.value)] });
         break;
       default:
         break;
@@ -24,19 +26,19 @@ const RangeSlider = () => {
   };
 
   const handleBlur = () => {
-    if (value[0] > value[1]) {
-      setValue([value[1], value[0]]);
+    if (filtersState.priceRange[0] > filtersState.priceRange[1]) {
+      dispatchValue({ type: "PRICE", payload: [filtersState.priceRange[1], filtersState.priceRange[0]] });
     }
   };
 
   return (
     <>
       <Typography align="left" sx={{ mb: "10px" }}>
-        Price ($) {value[0]}-{value[1]}
+        Price ($) {filtersState.priceRange[0]}-{filtersState.priceRange[1]}
       </Typography>{" "}
       <Slider
         getAriaLabel={() => "Price Range Slider"}
-        value={value}
+        value={filtersState.priceRange}
         onChange={handleChange}
         valueLabelDisplay="auto"
         min={min}
@@ -83,7 +85,7 @@ const RangeSlider = () => {
       >
         <TextField
           id="minInput"
-          value={value[0]}
+          value={filtersState.priceRange[0]}
           size="small"
           onChange={handleInputChange}
           onBlur={handleBlur}
@@ -97,7 +99,7 @@ const RangeSlider = () => {
         <Typography component={"span"}>-</Typography>
         <TextField
           id="maxInput"
-          value={value[1]}
+          value={filtersState.priceRange[1]}
           size="small"
           onChange={handleInputChange}
           onBlur={handleBlur}

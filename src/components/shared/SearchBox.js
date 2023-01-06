@@ -1,11 +1,25 @@
+import React, { useContext } from "react";
 import { IconButton, InputAdornment, TextField } from "@mui/material";
-import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
-const SearchBox = () => {
+import { FiltersContext } from "../../contexts/filtersContext";
+
+const SearchBox = ({ type }) => {
+  const { state: filtersState, dispatch: dispatchFilter } =
+    useContext(FiltersContext);
+
+  const handleChange = (e) => {
+    type === "text"
+      ? dispatchFilter({ type: "TEXT", payload: e.target.value })
+      : dispatchFilter({ type: "LOC", payload: e.target.value });
+  };
+
   return (
     <TextField
       variant="outlined"
+      sx={{ width: "100%" }}
       InputProps={{
+        onChange: handleChange,
+        value: type === "text" ? filtersState.searchText : filtersState.searchLoc,
         sx: { paddingRight: "0px", height: "2.8rem" },
         endAdornment: (
           <InputAdornment

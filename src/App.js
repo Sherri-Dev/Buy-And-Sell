@@ -2,77 +2,90 @@ import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Header from "./components/Header";
+import Footer from "./components/global/Footer";
+import Header from "./components/global/Header";
+import { FiltersContextProvider } from "./contexts/filtersContext";
+import useCustomizer from "./hooks/useCustomizer";
+import AdDetails from "./pages/AdDetails";
 import Home from "./pages/Home";
 import SearchResults from "./pages/SearchResults";
 
-const theme = createTheme({
-  breakpoints: {
-    values: {
-      xs: 0,
-      mb: 400,
-      sm: 600,
-      md: 900,
-      lg: 1200,
-      xl: 1536,
+
+function App() {
+  const { theme: customTheme } = useCustomizer();
+  const theme = createTheme({
+    breakpoints: {
+      values: {
+        xs: 0,
+        mob: 400,
+        sm: 600,
+        md: 900,
+        lg: 1200,
+        xl: 1536
+      }
     },
-  },
-  typography: {
-    fontFamily: "Poppins",
-  },
-  palette: {
-    primary: {
-      main: "#FFCC00",
-      dark: "#d3a900",
-    },
-    secondary: {
-      main: "#2F2F2F",
-    },
-    transparent: { main: "rgba(0,0,0,0)" },
-    text: { secondary: "#979797" },
-  },
-  components: {
-    MuiTooltip: {
-      styleOverrides: {
-        tooltip: {
-          backgroundColor: "black",
-          ".MuiTooltip-arrow:before": {
+    typography: customTheme?.typography,
+    palette: customTheme?.pallete,
+    components: {
+      MuiTooltip: {
+        styleOverrides: {
+          tooltip: {
             backgroundColor: "black",
+            ".MuiTooltip-arrow:before": {
+              backgroundColor: "black",
+            },
           },
         },
       },
     },
-  },
-});
-function App() {
+  });
   const [headerHeight, setHeaderHeight] = useState(0);
 
   return (
     <ThemeProvider theme={theme}>
-      <Router>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <Header setHeaderHeight={setHeaderHeight} transparent={false} />
-                <Home headerHeight={headerHeight} />
-              </>
-            }
-          />
-        </Routes>
-        <Routes>
-          <Route
-            path="/search-results"
-            element={
-              <>
-                <Header setHeaderHeight={setHeaderHeight} transparent={false} />
-                <SearchResults headerHeight={headerHeight} />
-              </>
-            }
-          />
-        </Routes>
-      </Router>
+      <FiltersContextProvider>
+        <Router>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <>
+                  <Header
+                    setHeaderHeight={setHeaderHeight}
+                    transparent={true}
+                  />
+                  <Home headerHeight={headerHeight} />
+                </>
+              }
+            />
+            <Route
+              path="/search-results"
+              element={
+                <>
+                  <Header
+                    setHeaderHeight={setHeaderHeight}
+                    transparent={false}
+                  />
+                  <SearchResults headerHeight={headerHeight} />
+                </>
+              }
+            />
+            <Route
+              path="/:id"
+              element={
+                <>
+                  <Header
+                    setHeaderHeight={setHeaderHeight}
+                    transparent={false}
+                  />
+                  <AdDetails headerHeight={headerHeight} />
+                </>
+              }
+            />
+          </Routes>
+          <Footer />
+        </Router>
+      </FiltersContextProvider>
     </ThemeProvider>
   );
 }

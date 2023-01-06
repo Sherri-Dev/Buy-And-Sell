@@ -1,16 +1,19 @@
-import { useState } from "react";
+import { useContext } from "react";
 import {
   FormControl,
   FormControlLabel,
   Radio,
   RadioGroup,
 } from "@mui/material";
+import { FiltersContext } from "../../contexts/filtersContext";
 
-const RadioComponent = ({ items }) => {
-  const [value, setValue] = useState("");
+const RadioComponent = ({ type, items }) => {
+  const { state: filtersState, dispatch: dispatchFilter } = useContext(FiltersContext);
 
-  const handleChange = (event) => {
-    setValue(event.target.value);
+  const handleChange = (e) => {
+    type === "warranty"
+      ? dispatchFilter({ type: "WARRANTY", payload: e.target.value })
+      : dispatchFilter({ type: "CONDITION", payload: e.target.value });
   };
 
   return (
@@ -18,7 +21,7 @@ const RadioComponent = ({ items }) => {
       <RadioGroup
         aria-labelledby="radio-buttons-group"
         name="radio-buttons-group"
-        value={value}
+        value={type === "warranty" ? filtersState.warranty : filtersState.condition}
         onChange={handleChange}
       >
         {items.map((item, index) => {

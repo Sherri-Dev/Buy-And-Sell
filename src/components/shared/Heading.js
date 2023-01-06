@@ -1,7 +1,8 @@
 import { Typography } from "@mui/material";
 import React from "react";
 
-const Heading = ({ main, sub1, sub2, mb }) => {
+const Heading = ({ title, mb }) => {
+  const [sub1, main, sub2] = title && title?.split(" ");
   return (
     <Typography
       variant="h2"

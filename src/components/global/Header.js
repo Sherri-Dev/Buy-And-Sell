@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   AppBar,
-  Button,
   Fab,
   IconButton,
+  Stack,
   Toolbar,
   Tooltip,
   Typography,
@@ -16,15 +16,20 @@ import { Box, Container } from "@mui/system";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { useTheme } from "@emotion/react";
-import Btn from "./Btn";
+import Btn from "../shared/Btn";
+import useFetch from "../../hooks/useFetch";
+import { getSiteIdentity } from "../../helpers/formatApi";
 
 const Header = ({ setHeaderHeight, transparent }) => {
   const header = useRef();
   const backToTop = useRef();
+  const { data, err, isLoading } = useFetch("http://localhost:1337/api/header?populate=deep")
   useEffect(() => {
     setHeaderHeight(header.current.clientHeight);
     // eslint-disable-next-line
   }, []);
+  const menu = data?.panels.find(obj => obj.menu)?.menu?.data?.attributes;
+  const siteIdentity = data?.panels.find(obj => obj.config)?.config?.data?.attributes?.siteIdentity
   const theme = useTheme();
 
   window.onscroll = () => {
@@ -44,7 +49,7 @@ const Header = ({ setHeaderHeight, transparent }) => {
           padding: "0.7rem 0",
           borderBottom: "grey 1px solid",
           transition: "background-color 0.5s ease",
-          backgroundColor: `${transparent ? "transparent" : "secondary.main"}`,
+          backgroundColor: `${transparent ? "transparent" : "#575757"}`,
           position: "fixed",
           top: 0,
           zIndex: theme.zIndex.drawer + 1,
@@ -68,53 +73,41 @@ const Header = ({ setHeaderHeight, transparent }) => {
                 color: `${transparent ? "white" : "white"}`,
               }}
             >
-              Buy and Sell
+              {siteIdentity?.siteTitle}
             </Typography>
-            <Box flexGrow={0} sx={{ ml: { sm: "auto" } }}>
-              <Tooltip title="Login" placement="top-start" arrow>
-                <IconButton
-                  sx={{
-                    backgroundColor: "info.main",
-                    color: "white",
-                    "&:hover": { backgroundColor: "info.dark" },
-                  }}
-                >
-                  <LoginIcon
-                    sx={{ fontSize: { xs: "1.35rem", mb: "1.55rem" } }}
+            <Stack flexGrow={0} sx={{ ml: { sm: "auto" } }} flexDirection="row" gap="10px">
+              {menu?.links.map((link) => {
+                return link.type === "anchor" ? <Tooltip title={link.label} placement="top-start" arrow>
+                  <IconButton
+                    sx={{
+                      backgroundColor: `${link?.themeSelector?.theme}.main`,
+                      color: "white",
+                      "&:hover": { backgroundColor: `${link?.themeSelector?.theme}.dark` },
+                    }}
+                    href={link.href}
+                    target={link.target}
+                  >
+                    {link.href === "login" ?
+                      <LoginIcon
+                        sx={{ fontSize: { xs: "1.35rem", mob: "1.55rem" } }}
+                      />
+                      : link.href === "register" ? <LockOpenIcon sx={{ fontSize: { xs: "1.35rem", mob: "1.55rem" } }} /> : null}
+                  </IconButton>
+                </Tooltip> :
+                  <Btn
+                    text={link.label}
+                    sx={{
+                      fontSize: { xs: "0.9em", mob: "1rem" },
+                      padding: { xs: "6px 16px", mob: "7px 22px" },
+                      borderRadius: "999px",
+                      gap: 0,
+                    }}
+                    startIcon={<AddIcon sx={{ mr: "-6px" }} />}
+                    variant="contained"
                   />
-                </IconButton>
-              </Tooltip>
-              <Tooltip
-                title="Register"
-                placement="top-start"
-                arrow
-                sx={{ backgroundColor: "black" }}
-              >
-                <IconButton
-                  sx={{
-                    backgroundColor: "success.main",
-                    color: "white",
-                    marginInline: 2,
-                    "&:hover": { backgroundColor: "success.dark" },
-                  }}
-                >
-                  <LockOpenIcon
-                    sx={{ fontSize: { xs: "1.35rem", mb: "1.55rem" } }}
-                  />
-                </IconButton>
-              </Tooltip>
-              <Btn
-                text={"Post Ad"}
-                sx={{
-                  fontSize: { xs: "0.9em", mb: "1rem" },
-                  padding: { xs: "6px 16px", mb: "7px 22px" },
-                  borderRadius: "999px",
-                  gap: 0,
-                }}
-                startIcon={<AddIcon sx={{ mr: "-6px" }} />}
-                variant="contained"
-              />
-            </Box>
+              })}
+
+            </Stack>
           </Toolbar>
         </Container>
       </AppBar>

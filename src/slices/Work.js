@@ -11,10 +11,12 @@ import PostAddIcon from "@mui/icons-material/PostAdd";
 import Typography from "@mui/material/Typography";
 import { keyframes } from "@mui/system";
 import { Box } from "@mui/system";
-import Heading from "../../components/Heading";
+import Heading from "../components/shared/Heading";
 import { Container } from "@mui/material";
+import { isEven } from "../helpers";
+import useCustomizer from "../hooks/useCustomizer";
 
-const Work = () => {
+const Work = ({ content }) => {
   const fillUp = keyframes`  
 from {
   width:0
@@ -29,6 +31,9 @@ from {
 to {
   height:"100%";
 }`;
+  const { theme } = useCustomizer();
+
+  const pallete = theme?.pallete;
   return (
     <Container>
       <Box
@@ -36,9 +41,7 @@ to {
         sx={{ padding: { xs: "20px 0 40px 0 ", sm: "25px 0 60px 0" } }}
       >
         <Heading
-          main="Works"
-          sub1={"It"}
-          sub2="As"
+          title={content?.title}
           mb={{ xs: "50px", sm: "70px" }}
         />
         <Timeline
@@ -55,81 +58,90 @@ to {
             },
           }}
         >
-          <TimelineItem
-            sx={{
-              overflow: "hidden",
-              ".MuiTimelineDot-root:before": {
-                position: "absolute",
-                content: `''`,
-                top: 0,
-                left: 0,
-                backgroundColor: "white",
-                transition: "all 0.3s ease-in",
-                transitionDelay: "0.5s",
-              },
-              ":hover": {
-                color: "white",
-                cursor: "pointer",
-                ".MuiTimelineSeparator-root": { position: "relative" },
+          {content?.items?.map((item, i) => {
+            return (<TimelineItem
+              key={i}
+              sx={{
+                overflow: "hidden",
                 ".MuiTimelineDot-root:before": {
-                  width: "50rem",
-                  height: "100%",
-                  backgroundColor: "primary.main",
-                  animation: `${fillUp} 0.5s ease-in forwards`,
-                  animationDelay: "0.3s",
-                  zIndex: -1,
-                },
-                ".MuiTimelineDot-root:after": {
                   position: "absolute",
                   content: `''`,
                   top: 0,
-                  left: { xs: 0, sm: "-1rem" },
-                  width: "1rem",
-                  height: "100%",
-                  backgroundColor: "secondary.main",
-                  animation: `${fillUpHeight} 0.25s ease-in forwards`,
-                  borderTopLeftRadius: "5px",
-                  borderBottomLeftRadius: "5px",
-                  zIndex: -1,
-                },
-                ".MuiTimelineDot-root": {
-                  color: "secondary.main",
+                  left: isEven(i) ? 0 : "auto",
+                  right: isEven(i) ? "auto" : 0,
                   backgroundColor: "white",
+                  transition: "all 0.3s ease-in",
+                  transitionDelay: "0.5s",
                 },
-                ".css-1hrnx5o-MuiTypography-root-MuiTimelineContent-root": {
-                  color: "black",
+                ":hover": {
+                  color: "white",
+                  cursor: "pointer",
+                  ".MuiTimelineSeparator-root": { position: "relative" },
+                  ".MuiTimelineDot-root:before": {
+                    width: "50rem",
+                    height: "100%",
+                    backgroundColor: `${pallete?.[!isEven(i) ? "secondary" : "primary"]?.main}`,
+                    animation: `${fillUp} 0.5s ease-in forwards`,
+                    animationDelay: "0.3s",
+                    zIndex: -1,
+                  },
+                  ".MuiTimelineDot-root:after": {
+                    position: "absolute",
+                    content: `''`,
+                    top: 0,
+                    left: isEven(i) ? { xs: 0, sm: "-1rem" } : "auto",
+                    right: isEven(i) ? "auto" : { xs: 0, sm: "-1rem" },
+                    width: "1rem",
+                    height: "100%",
+                    backgroundColor: `${pallete?.[isEven(i) ? "secondary" : "primary"]?.main}`,
+                    animation: `${fillUpHeight} 0.25s ease-in forwards`,
+                    borderTopLeftRadius: isEven(i) ? "5px" : 0,
+                    borderBottomLeftRadius: isEven(i) ? "5px" : 0,
+                    borderTopRightRadius: isEven(i) ? 0 : "5px",
+                    borderBottomRightRadius: !isEven(i) ? 0 : "5px",
+                    zIndex: -1,
+                  },
+                  ".MuiTimelineDot-root": {
+                    color: `${pallete?.[!isEven(i) ? "primary" : "secondary"]?.main}`,
+                    backgroundColor: "white",
+                  },
+                  ".css-1hrnx5o-MuiTypography-root-MuiTimelineContent-root": {
+                    color: `${isEven(i) ? pallete?.secondary?.main : "white"}`,
+                  },
                 },
-              },
-            }}
-          >
-            <TimelineSeparator>
-              <TimelineConnector />
-              <TimelineDot
-                color="secondary"
-                sx={{ padding: { xs: "0.6rem", mb: "0.8rem" } }}
-              >
-                <PersonAddAlt1Icon
-                  sx={{ fontSize: { xs: "1.8rem", mb: "2.2rem" } }}
-                />
-              </TimelineDot>
-              <TimelineConnector />
-            </TimelineSeparator>
-            <TimelineContent sx={{ py: "12px", px: 2 }}>
-              <Typography
-                variant="h6"
-                sx={{ fontSize: { xs: "1rem", mb: "1.1rem", sm: "1.3rem" } }}
-                component="span"
-              >
-                Create Your Account
-              </Typography>
-              <Typography
-                sx={{ fontSize: { xs: "0.85rem", mb: "0.95rem", sm: "1rem" } }}
-              >
-                Create an Account to get started!
-              </Typography>
-            </TimelineContent>
-          </TimelineItem>
-          <TimelineItem
+              }}
+            >
+              <TimelineSeparator>
+                <TimelineConnector />
+                <TimelineDot
+                  color="secondary"
+                  sx={{ padding: { xs: "0.6rem", mob: "0.8rem" } }}
+                >
+                  <PersonAddAlt1Icon
+                    sx={{ fontSize: { xs: "1.8rem", mob: "2.2rem" } }}
+                  />
+                </TimelineDot>
+                <TimelineConnector />
+              </TimelineSeparator>
+              <TimelineContent sx={{ py: "12px", px: 2 }}>
+                <Typography
+                  variant="h6"
+                  sx={{ fontSize: { xs: "1rem", mob: "1.1rem", sm: "1.3rem" } }}
+                  component="span"
+                >
+                  {item?.title}
+                </Typography>
+                <Typography
+                  sx={{ fontSize: { xs: "0.85rem", mob: "0.95rem", sm: "1rem" } }}
+                >
+                  {item?.subTitle}
+                </Typography>
+              </TimelineContent>
+            </TimelineItem>
+
+            )
+          })}
+          {/* <TimelineItem
             sx={{
               overflow: "hidden",
               ".MuiTimelineDot-root:before": {
@@ -181,10 +193,10 @@ to {
               <TimelineConnector />
               <TimelineDot
                 color="primary"
-                sx={{ padding: { xs: "0.6rem", mb: "0.8rem" } }}
+                sx={{ padding: { xs: "0.6rem", mob: "0.8rem" } }}
               >
                 <PostAddIcon
-                  sx={{ fontSize: { xs: "1.8rem", mb: "2.2rem" } }}
+                  sx={{ fontSize: { xs: "1.8rem", mob: "2.2rem" } }}
                 />
               </TimelineDot>
               <TimelineConnector />
@@ -192,13 +204,13 @@ to {
             <TimelineContent sx={{ py: "12px", px: 2 }}>
               <Typography
                 variant="h6"
-                sx={{ fontSize: { xs: "1rem", mb: "1.1rem", sm: "1.3rem" } }}
+                sx={{ fontSize: { xs: "1rem", mob: "1.1rem", sm: "1.3rem" } }}
                 component="span"
               >
                 Post Ad
               </Typography>
               <Typography
-                sx={{ fontSize: { xs: "0.85rem", mb: "0.95rem", sm: "1rem" } }}
+                sx={{ fontSize: { xs: "0.85rem", mob: "0.95rem", sm: "1rem" } }}
               >
                 Posting Ad is completely FREE!
               </Typography>
@@ -255,10 +267,10 @@ to {
               <TimelineConnector />
               <TimelineDot
                 color="secondary"
-                sx={{ padding: { xs: "0.6rem", mb: "0.8rem" } }}
+                sx={{ padding: { xs: "0.6rem", mob: "0.8rem" } }}
               >
                 <HandshakeIcon
-                  sx={{ fontSize: { xs: "1.8rem", mb: "2.2rem" } }}
+                  sx={{ fontSize: { xs: "1.8rem", mob: "2.2rem" } }}
                 />
               </TimelineDot>
               <TimelineConnector />
@@ -266,18 +278,18 @@ to {
             <TimelineContent sx={{ py: "12px", px: 2 }}>
               <Typography
                 variant="h6"
-                sx={{ fontSize: { xs: "1rem", mb: "1.1rem", sm: "1.3rem" } }}
+                sx={{ fontSize: { xs: "1rem", mob: "1.1rem", sm: "1.3rem" } }}
                 component="span"
               >
                 Deal Done
               </Typography>
               <Typography
-                sx={{ fontSize: { xs: "0.85rem", mb: "0.95rem", sm: "1rem" } }}
+                sx={{ fontSize: { xs: "0.85rem", mob: "0.95rem", sm: "1rem" } }}
               >
                 Buyers will contact you and the deal will be done!
               </Typography>
             </TimelineContent>
-          </TimelineItem>
+          </TimelineItem> */}
         </Timeline>
       </Box>
     </Container>
