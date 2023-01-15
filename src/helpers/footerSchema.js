@@ -1,8 +1,5 @@
 import {
   Box,
-  Container,
-  Divider,
-  getIconButtonUtilityClass,
   IconButton,
   List,
   ListItem,
@@ -12,11 +9,10 @@ import {
   SvgIcon,
   Typography,
 } from "@mui/material";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import TwitterIcon from "@mui/icons-material/Twitter";
 import Categories from "../components/shared/Categories";
 import ReactHtmlParser from "react-html-parser";
+import { Link } from "react-router-dom";
+import { CategoriesContextProvider } from "../contexts/categoriesContext";
 
 const footerSchema = (contentName, { content }) => {
   const siteIdentity =
@@ -25,11 +21,18 @@ const footerSchema = (contentName, { content }) => {
   return {
     config: (
       <>
-        <Box sx={{ flexBasis: { sm: "100%" } }}>
+        <Box sx={{ flex: 1 }} key="footer-col-1">
           <Typography
             variant="h6"
             fontWeight={"bold"}
-            sx={{ mb: { xs: "1rem", sm: "1rem" }, color: "white" }}
+            sx={{
+              mb: { xs: "1rem", sm: "1rem" },
+              color: "white",
+              textDecoration: "none",
+              display: "inline-block",
+            }}
+            component={Link}
+            to="/"
           >
             {siteIdentity?.siteTitle}
           </Typography>
@@ -53,62 +56,32 @@ const footerSchema = (contentName, { content }) => {
             Follow us
           </Typography>
           <Stack direction={"row"} gap="0.5rem" mt={"0.5rem"}>
-            <IconButton
-              href={"https://mnkdev.web.app"}
-              target="_blank"
-              sx={{ padding: "0" }}
-            >
-              <SvgIcon>
-                {ReactHtmlParser(
-                  content[contentName]?.config?.data.attributes.socialLinks[0]
-                    ?.icon?.data?.attributes.path
-                )}
-              </SvgIcon>
-              {
-                <FacebookIcon
-                  color="primary"
-                  sx={{
-                    fontSize: "2rem",
-                    "&:hover": { color: "primary.dark" },
-                  }}
-                />
-              }
-            </IconButton>
-            <IconButton
-              href={"https://mnkdev.web.app"}
-              target="_blank"
-              sx={{ padding: "0" }}
-            >
-              <LinkedInIcon
-                color="primary"
-                sx={{
-                  fontSize: "2rem",
-                  "&:hover": { color: "primary.dark" },
-                }}
-              />
-            </IconButton>
-            <IconButton
-              href={"https://mnkdev.web.app"}
-              target="_blank"
-              sx={{ padding: "0", mx: "2px" }}
-            >
-              <TwitterIcon
-                color="secondary"
-                sx={{
-                  fontSize: "1.58rem",
-                  backgroundColor: "primary.main",
-                  borderRadius: "4px",
-                  padding: "1px",
-                  "&:hover": { backgroundColor: "primary.dark" },
-                }}
-              />
-            </IconButton>
+            {socialIcons?.map((link) => {
+              return (
+                <IconButton
+                  href={link.href}
+                  target="_blank"
+                  sx={{ padding: "0" }}
+                  key={link?.icon?.data?.id}
+                >
+                  <SvgIcon
+                    color="primary"
+                    sx={{
+                      fontSize: "2rem",
+                      "&:hover": { color: "primary.dark" },
+                    }}
+                  >
+                    {ReactHtmlParser(link.icon?.data?.attributes.path)}
+                  </SvgIcon>
+                </IconButton>
+              );
+            })}
           </Stack>
         </Box>
       </>
     ),
     categories: (
-      <Box sx={{ flexBasis: { sm: "100%" } }}>
+      <Box sx={{ flex: 1 }} key="footer-col-2">
         {" "}
         <List
           sx={{
@@ -133,19 +106,23 @@ const footerSchema = (contentName, { content }) => {
           >
             Categories
           </ListSubheader>
-          <Categories content={content[contentName]} />
+          <CategoriesContextProvider>
+            <Categories content={content[contentName].categories?.data} />
+          </CategoriesContextProvider>
         </List>
       </Box>
     ),
     navigation: (
       <>
-        <Box sx={{ flexBasis: { sm: "100%" } }}>
+        <Box sx={{ flex: 1 }} key="footer-col-3">
           <List
             sx={{
               paddingTop: 0,
+              li: { paddingInline: 0 },
+
               ".MuiListItemButton-root": {
+                paddingInline: 0,
                 fontFamily: "Poppins",
-                color: "#979797",
                 fontSize: { xs: "1rem", mb: "1.1rem" },
               },
             }}
@@ -162,7 +139,11 @@ const footerSchema = (contentName, { content }) => {
               Quick Links
             </ListSubheader>
             {content[contentName]?.menu?.data?.attributes.links.map((link) => (
-              <ListItem disablePadding>
+              <ListItem
+                disablePadding
+                sx={{ color: "#979797" }}
+                key={link.href}
+              >
                 <ListItemButton href={link.href}>{link.label}</ListItemButton>
               </ListItem>
             ))}

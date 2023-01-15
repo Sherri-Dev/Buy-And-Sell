@@ -4,11 +4,16 @@ import React, { useRef } from "react";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import useSlider from "../../hooks/useSlider";
+import { useEffect } from "react";
 
-const Carousel = ({ items, title, btnsOutside }) => {
+const Carousel = ({ items, title, currentSlide=1, btnsOutside }) => {
   const itemRef = useRef();
-  const { sliderTranslate, handleClick, disabledForward, disabledBackward } =
+  const { sliderTranslate,setCurrentSlide, handleClick, disabledForward, disabledBackward } =
     useSlider(itemRef, 3);
+useEffect(() => {
+  setCurrentSlide(currentSlide)
+
+}, [currentSlide])
 
   return (
     <Box

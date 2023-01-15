@@ -1,16 +1,16 @@
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
-import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { lazy, Suspense, useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Footer from "./components/global/Footer";
 import Header from "./components/global/Header";
 import { FiltersContextProvider } from "./contexts/filtersContext";
 import useCustomizer from "./hooks/useCustomizer";
-import AdDetails from "./pages/AdDetails";
-import Home from "./pages/Home";
-import SearchResults from "./pages/SearchResults";
 
-
+const Home = lazy(() => import('./pages/Home') );
+const SearchResults = lazy(() => import('./pages/SearchResults') );
+const AdDetails = lazy(()=> import('./pages/AdDetails'));
+const NotFound = lazy(()=> import('./slices/NotFound'));
 function App() {
   const { theme: customTheme } = useCustomizer();
   const theme = createTheme({
@@ -44,6 +44,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <FiltersContextProvider>
+        <Suspense fallback='loading...'>
         <Router>
           <Routes>
             <Route
@@ -70,8 +71,9 @@ function App() {
                 </>
               }
             />
+            <Route path="ads" element={ <Navigate to='/search-results' />}/>
             <Route
-              path="/:id"
+              path="/ads/:slug"
               element={
                 <>
                   <Header
@@ -82,9 +84,14 @@ function App() {
                 </>
               }
             />
+            <Route path= "*" element={<><Header
+                    setHeaderHeight={setHeaderHeight}
+                    transparent={false}
+                  /><NotFound/></>} />
           </Routes>
           <Footer />
         </Router>
+        </Suspense>
       </FiltersContextProvider>
     </ThemeProvider>
   );

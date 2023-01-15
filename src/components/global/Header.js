@@ -1,35 +1,38 @@
-import React, { useMemo } from "react";
+import React from "react";
 import {
   AppBar,
   Fab,
   IconButton,
   Stack,
+  SvgIcon,
   Toolbar,
   Tooltip,
   Typography,
 } from "@mui/material";
-import LoginIcon from "@mui/icons-material/Login";
-import LockOpenIcon from "@mui/icons-material/LockOpen";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import AddIcon from "@mui/icons-material/Add";
-import { Box, Container } from "@mui/system";
+import { Container } from "@mui/system";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { useTheme } from "@emotion/react";
 import Btn from "../shared/Btn";
 import useFetch from "../../hooks/useFetch";
-import { getSiteIdentity } from "../../helpers/formatApi";
+import { Link } from "react-router-dom";
+import ReactHtmlParser from "react-html-parser";
 
 const Header = ({ setHeaderHeight, transparent }) => {
   const header = useRef();
   const backToTop = useRef();
-  const { data, err, isLoading } = useFetch("http://localhost:1337/api/header?populate=deep")
+  const { data } = useFetch(
+    "http://localhost:1337/api/header?populate=deep"
+  );
   useEffect(() => {
     setHeaderHeight(header.current.clientHeight);
     // eslint-disable-next-line
   }, []);
-  const menu = data?.panels.find(obj => obj.menu)?.menu?.data?.attributes;
-  const siteIdentity = data?.panels.find(obj => obj.config)?.config?.data?.attributes?.siteIdentity
+  const menu = data?.attributes?.panels.find((obj) => obj.menu)?.menu?.data
+    ?.attributes;
+  const siteIdentity = data?.attributes?.panels.find((obj) => obj.config)
+    ?.config?.data?.attributes?.siteIdentity;
   const theme = useTheme();
 
   window.onscroll = () => {
@@ -68,32 +71,50 @@ const Header = ({ setHeaderHeight, transparent }) => {
             <Typography
               variant="h6"
               fontWeight={"bold"}
+              component={Link}
+              to="/"
               sx={{
                 mb: { xs: 2, sm: 0 },
                 color: `${transparent ? "white" : "white"}`,
+                textDecoration: "none",
+                display: "inline-block",
               }}
             >
               {siteIdentity?.siteTitle}
             </Typography>
-            <Stack flexGrow={0} sx={{ ml: { sm: "auto" } }} flexDirection="row" gap="10px">
-              {menu?.links.map((link) => {
-                return link.type === "anchor" ? <Tooltip title={link.label} placement="top-start" arrow>
-                  <IconButton
-                    sx={{
-                      backgroundColor: `${link?.themeSelector?.theme}.main`,
-                      color: "white",
-                      "&:hover": { backgroundColor: `${link?.themeSelector?.theme}.dark` },
-                    }}
-                    href={link.href}
-                    target={link.target}
+            <Stack
+              flexGrow={0}
+              sx={{ ml: { sm: "auto" } }}
+              flexDirection="row"
+              gap="10px"
+            >
+              {menu?.links.map((link, i) => {
+                return link.type === "anchor" ? (
+                  <Tooltip
+                    title={link.label}
+                    placement="top-start"
+                    arrow
+                    key={i}
                   >
-                    {link.href === "login" ?
-                      <LoginIcon
+                    <IconButton
+                      sx={{
+                        backgroundColor: `${link?.themeSelector?.theme}.main`,
+                        color: "white",
+                        "&:hover": {
+                          backgroundColor: `${link?.themeSelector?.theme}.dark`,
+                        },
+                      }}
+                      href={link.href}
+                      target={link.target}
+                    >
+                      <SvgIcon
                         sx={{ fontSize: { xs: "1.35rem", mob: "1.55rem" } }}
-                      />
-                      : link.href === "register" ? <LockOpenIcon sx={{ fontSize: { xs: "1.35rem", mob: "1.55rem" } }} /> : null}
-                  </IconButton>
-                </Tooltip> :
+                      >
+                        {ReactHtmlParser(link.icon?.data?.attributes.path)}
+                      </SvgIcon>
+                    </IconButton>
+                  </Tooltip>
+                ) : (
                   <Btn
                     text={link.label}
                     sx={{
@@ -102,11 +123,15 @@ const Header = ({ setHeaderHeight, transparent }) => {
                       borderRadius: "999px",
                       gap: 0,
                     }}
-                    startIcon={<AddIcon sx={{ mr: "-6px" }} />}
+                    startIcon={
+                      <SvgIcon sx={{ mr: "-6px" }}>
+                        {ReactHtmlParser(link.icon?.data?.attributes.path)}
+                      </SvgIcon>
+                    }
                     variant="contained"
                   />
+                );
               })}
-
             </Stack>
           </Toolbar>
         </Container>

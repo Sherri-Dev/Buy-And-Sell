@@ -9,19 +9,22 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React from "react";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import React, { useCallback } from "react";
 import { Box } from "@mui/system";
 import { Link } from "react-router-dom";
-import { getImages } from "../../helpers/formatApi";
+import { getComponentsFromDZ, getImages } from "../../helpers/formatApi";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { removeComponentName } from "../../helpers/formatApi";
+import { useMemo } from "react";
 
 const Ad = ({ content, variant, size, borderRadius, elevation }) => {
-
-  const isFeatured = content.categories.data.find(ctg => ctg.attributes.name === "featured")
-
+  const isFeatured = content?.categories?.data.find(
+    (ctg) => ctg.attributes.name === "Featured"
+  );
+const {"related-ads":relatedAds,edito:tipsList} = getComponentsFromDZ(content.details)
   return variant === 1 ? (
     <Card
       sx={{
@@ -43,29 +46,33 @@ const Ad = ({ content, variant, size, borderRadius, elevation }) => {
       elevation={elevation || 5}
     >
       <CardMedia
-        image={`${process.env.REACT_APP_BACKEND_URL}${getImages(content.images, "thumbnail")[0].url}`}
+        image={`${process.env.REACT_APP_BACKEND_URL}${
+          getImages(content?.images, "thumbnail")[0].url
+        }`}
         sx={{ height: "100%", position: "relative" }}
       >
         <CardHeader
           avatar={
-            isFeatured && <Typography
-              sx={{
-                position: "absolute",
-                top: "14px",
-                left: "-1.7rem",
-                width: "7rem",
-                fontSize: size === "small" ? "0.865rem" : "0.875rem",
-                textAlign: "center",
-                color: "white",
-                backgroundColor: "red",
-                padding: "0.2rem 0.4rem",
-                transform: "rotate(-45deg)",
-                zIndex: 1,
-              }}
-              variant="subtitle2"
-            >
-              Featured
-            </Typography>
+            isFeatured && (
+              <Typography
+                sx={{
+                  position: "absolute",
+                  top: "14px",
+                  left: "-1.7rem",
+                  width: "7rem",
+                  fontSize: size === "small" ? "0.865rem" : "0.875rem",
+                  textAlign: "center",
+                  color: "white",
+                  backgroundColor: "red",
+                  padding: "0.2rem 0.4rem",
+                  transform: "rotate(-45deg)",
+                  zIndex: 1,
+                }}
+                variant="subtitle2"
+              >
+                Featured
+              </Typography>
+            )
           }
           action={
             <>
@@ -108,11 +115,11 @@ const Ad = ({ content, variant, size, borderRadius, elevation }) => {
                   : { xs: "17px", sm: "19px" },
             }}
           >
-            {`${content?.price.currency} ${content?.price.value} (${content?.price.tag})`}
+            {`${content?.price?.currency} ${content?.price?.value} (${content?.price?.tag})`}
           </Typography>
           <Typography
             component={Link}
-            to="/1"
+            to={`/ads/${content?.slug}`}
             variant="h5"
             sx={{
               fontWeight: "500",
@@ -151,7 +158,7 @@ const Ad = ({ content, variant, size, borderRadius, elevation }) => {
               }}
               noWrap
             >
-              {content.address}
+              {content.location?.data?.attributes.address}
             </Typography>
           </Stack>
           <Divider
@@ -205,25 +212,27 @@ const Ad = ({ content, variant, size, borderRadius, elevation }) => {
           </Box>
         </CardContent>
       </CardMedia>
-    </Card >
+    </Card>
   ) : variant === 2 ? (
     <Card sx={{ position: "relative" }} elevation={5}>
       <CardHeader
         sx={{ position: "absolute", top: 0, left: 0, width: "100%" }}
         avatar={
-          <Typography
-            sx={{
-              textAlign: "center",
-              color: "white",
-              backgroundColor: "red",
-              padding: "0.2rem 0.4rem",
-              borderRadius: "4px",
-              zIndex: 1,
-            }}
-            variant="subtitle2"
-          >
-            Featured
-          </Typography>
+          isFeatured && (
+            <Typography
+              sx={{
+                textAlign: "center",
+                color: "white",
+                backgroundColor: "red",
+                padding: "0.2rem 0.4rem",
+                borderRadius: "4px",
+                zIndex: 1,
+              }}
+              variant="subtitle2"
+            >
+              Featured
+            </Typography>
+          )
         }
         action={
           <>
@@ -247,10 +256,12 @@ const Ad = ({ content, variant, size, borderRadius, elevation }) => {
         }
       />
       <CardMedia
-        image="https://adforestpro.scriptsbundle.com/wp-content/uploads/2021/09/278606-1-850x450-2-300x224.png"
+        image={`${process.env.REACT_APP_BACKEND_URL}${
+          getImages(content?.images, "thumbnail")[0].url
+        }`}
         sx={{ height: "200px" }}
         component={Link}
-        to="/1"
+        to={`/ads/${content?.slug}`}
       />
       <CardContent
         sx={{
@@ -265,7 +276,7 @@ const Ad = ({ content, variant, size, borderRadius, elevation }) => {
           color="primary"
           sx={{ fontSize: { xs: "17px", sm: "19px" } }}
         >
-          $75000.00 (Negotiable)
+          {`${content?.price?.currency} ${content?.price?.value} (${content?.price?.tag})`}
         </Typography>
         <Typography
           variant="h5"
@@ -276,7 +287,7 @@ const Ad = ({ content, variant, size, borderRadius, elevation }) => {
           }}
           noWrap
         >
-          3 Kanal Brand New Villa
+          {content.title}
         </Typography>
 
         <Stack
@@ -285,7 +296,7 @@ const Ad = ({ content, variant, size, borderRadius, elevation }) => {
           spacing={1}
           sx={{ color: "white", mt: "0.7rem", position: "relative" }}
         >
-          <LocationOnIcon sx={{}} />
+          <LocationOnIcon />
           <Typography
             variant="subtitle1"
             sx={{
@@ -294,7 +305,7 @@ const Ad = ({ content, variant, size, borderRadius, elevation }) => {
             }}
             noWrap
           >
-            Lorem ipsum dolor sit amet.
+            {content.location.data.attributes.address}
           </Typography>
         </Stack>
         <Divider
@@ -318,7 +329,9 @@ const Ad = ({ content, variant, size, borderRadius, elevation }) => {
             spacing={1}
             sx={{ color: "#cfcfcf" }}
           >
-            <AccessTimeIcon sx={{}} />
+            <AccessTimeIcon
+              sx={{ fontSize: size === "small" ? "1.3rem" : "1.5rem" }}
+            />
             <Typography
               variant="subtitle1"
               sx={{
@@ -327,7 +340,7 @@ const Ad = ({ content, variant, size, borderRadius, elevation }) => {
               }}
               noWrap
             >
-              September 30,2022
+              {new Date(content.publishedAt).toDateString()}
             </Typography>
           </Stack>{" "}
           <Tooltip

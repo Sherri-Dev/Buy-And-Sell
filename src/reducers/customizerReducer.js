@@ -3,11 +3,9 @@ const customizerReducer = (state, action) => {
         case "GET":
             state.customizer = action.payload
             return { ...state };
-            break;
 
         default:
             return state
-            break;
     }
 }
 

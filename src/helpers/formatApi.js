@@ -17,6 +17,18 @@ export const removeComponentName = (arr) => {
     return { [compName]: newObj };
   });
 };
+export const getComponentsFromDZ = (dz) => {
+  let compArr = removeComponentName(dz);
+  let newObj = {};
+  compArr?.forEach((obj,i) => {
+    for (const key in obj) {
+      if (Object.hasOwnProperty.call(obj, key)) {
+         newObj[key] = obj[key]  
+      }
+    }
+  });
+  return newObj;
+}
 
 export const getContent = (props, schema) => {
   let contentName = Object.keys(props.content)[0];
@@ -42,7 +54,10 @@ export const getImg = (data, variant = "full") => {
 };
 export const getImages = (data, variant = "full") => {
   let dataArr = [];
-
+  if (!data) {
+    dataArr = [{ url: "", alt: "" }];
+    return dataArr;
+  }
   switch (variant) {
     case "full":
       dataArr = data?.data?.map((img) => ({

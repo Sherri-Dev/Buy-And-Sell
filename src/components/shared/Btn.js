@@ -1,7 +1,8 @@
 import { Button } from "@mui/material";
 import React from "react";
+import { forwardRef } from "react";
 
-const Btn = ({ text, sx, ...props }) => {
+const Btn = forwardRef(({ text, sx, ...props },ref) => {
   return (
     <Button
       {...props}
@@ -12,10 +13,11 @@ const Btn = ({ text, sx, ...props }) => {
           color: "white",
         },
       }}
+      ref={ref}
     >
       {text}
     </Button>
   );
-};
+});
 
 export default Btn;

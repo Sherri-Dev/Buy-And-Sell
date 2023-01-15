@@ -2,14 +2,37 @@ import { ListItem, ListItemButton } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FiltersContext } from "../../contexts/filtersContext";
-import ctgs from "../../ctgs.json";
 import { Avatar, Box, Chip, Typography } from "@mui/material";
 import { Tab, Tabs } from "@mui/material";
-import categories from "../../ctgs.json";
 import { getImg } from "../../helpers/formatApi";
 
 const Categories = ({ content, variant, textColor, drawerOpen }) => {
-  const { state: filtersState, dispatch: dispatchFilter } = useContext(FiltersContext);
+  // const { catState, dispatchCat } = useContext(CategoriesContext) || {
+  //   catState: {},
+  //   dispatchCat() {},
+  // };
+  // useEffect(() => {
+  //   if (catState?.data?.length == 0) {
+  //     fetch(`${process.env.REACT_APP_API_URL}/categories?populate=deep`)
+  //       .then((response) => {
+  //         return response.json();
+  //       })
+  //       .then((response) => {
+  //         if (response.data) {
+  //           dispatchCat({ type: "GET", payload: response.data });
+  //         } else {
+  //           dispatchCat({ type: "GET", payload: response.error });
+  //         }
+  //         return response;
+  //       })
+  //       .catch((err) => {
+  //         return dispatchCat({ type: "GET", payload: err });
+  //       });
+  //   }
+  // }, []);
+
+  const { state: filtersState, dispatch: dispatchFilter } =
+    useContext(FiltersContext);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -19,10 +42,13 @@ const Categories = ({ content, variant, textColor, drawerOpen }) => {
     }
     drawerOpen && drawerOpen(false);
     if (filtersState.filteredCtgs.indexOf(e.currentTarget.innerText) === -1) {
-      dispatchFilter({ type: "CTG", payload: [...filtersState.filteredCtgs, e.currentTarget.innerText] });
+      dispatchFilter({
+        type: "CTG",
+        payload: [...filtersState.filteredCtgs, e.currentTarget.innerText],
+      });
     }
 
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
   };
   const [value, setValue] = useState(0);
   const handleChange = (event, newValue) => {
@@ -50,11 +76,11 @@ const Categories = ({ content, variant, textColor, drawerOpen }) => {
           indicatorColor="transparent"
           variant="scrollable"
         >
-          {content.map((cat, i) => {
+          {content?.map((cat, i) => {
             let img = getImg(cat.attributes.img, "thumbnail");
             return (
               <Tab
-                key={i}
+                key={cat.id}
                 icon={
                   <Box
                     sx={{
@@ -104,7 +130,9 @@ const Categories = ({ content, variant, textColor, drawerOpen }) => {
                       {cat.attributes.name}
                     </Typography>
                     <Chip
-                      label={`${cat.attributes.ads.data.length} ${cat.attributes.ads.data.length > 1 ? 'Ads' : 'Ad'}`}
+                      label={`${cat.attributes?.ads?.data?.length} ${
+                        cat.attributes.ads.data.length > 1 ? "Ads" : "Ad"
+                      }`}
                       variant="filled"
                       size="small"
                       sx={{
@@ -121,8 +149,8 @@ const Categories = ({ content, variant, textColor, drawerOpen }) => {
         </Tabs>
       ) : (
         <>
-          {ctgs.map((ctg, i) => (
-            <ListItem disablePadding key={i}>
+          {content?.map((ctg, i) => (
+            <ListItem disablePadding key={ctg.id}>
               <ListItemButton
                 sx={{
                   color: textColor || "#979797",
@@ -131,7 +159,7 @@ const Categories = ({ content, variant, textColor, drawerOpen }) => {
                 }}
                 onClick={handleClick}
               >
-                {ctg}
+                {ctg.attributes.name}
               </ListItemButton>
             </ListItem>
           ))}

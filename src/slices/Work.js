@@ -5,15 +5,13 @@ import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineDot from "@mui/lab/TimelineDot";
-import HandshakeIcon from "@mui/icons-material/Handshake";
-import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
-import PostAddIcon from "@mui/icons-material/PostAdd";
 import Typography from "@mui/material/Typography";
 import { keyframes } from "@mui/system";
 import { Box } from "@mui/system";
 import Heading from "../components/shared/Heading";
-import { Container } from "@mui/material";
+import { Container, SvgIcon } from "@mui/material";
 import { isEven } from "../helpers";
+import ReactHtmlParser from "react-html-parser";
 import useCustomizer from "../hooks/useCustomizer";
 
 const Work = ({ content }) => {
@@ -40,10 +38,7 @@ to {
         component="section"
         sx={{ padding: { xs: "20px 0 40px 0 ", sm: "25px 0 60px 0" } }}
       >
-        <Heading
-          title={content?.title}
-          mb={{ xs: "50px", sm: "70px" }}
-        />
+        <Heading title={content?.title} mb={{ xs: "50px", sm: "70px" }} />
         <Timeline
           position={window.innerWidth > 600 ? "alternate" : "right"}
           sx={{
@@ -59,87 +54,99 @@ to {
           }}
         >
           {content?.items?.map((item, i) => {
-            return (<TimelineItem
-              key={i}
-              sx={{
-                overflow: "hidden",
-                ".MuiTimelineDot-root:before": {
-                  position: "absolute",
-                  content: `''`,
-                  top: 0,
-                  left: isEven(i) ? 0 : "auto",
-                  right: isEven(i) ? "auto" : 0,
-                  backgroundColor: "white",
-                  transition: "all 0.3s ease-in",
-                  transitionDelay: "0.5s",
-                },
-                ":hover": {
-                  color: "white",
-                  cursor: "pointer",
-                  ".MuiTimelineSeparator-root": { position: "relative" },
+            return (
+              <TimelineItem
+                key={i}
+                sx={{
+                  overflow: "hidden",
                   ".MuiTimelineDot-root:before": {
-                    width: "50rem",
-                    height: "100%",
-                    backgroundColor: `${pallete?.[!isEven(i) ? "secondary" : "primary"]?.main}`,
-                    animation: `${fillUp} 0.5s ease-in forwards`,
-                    animationDelay: "0.3s",
-                    zIndex: -1,
-                  },
-                  ".MuiTimelineDot-root:after": {
                     position: "absolute",
                     content: `''`,
                     top: 0,
-                    left: isEven(i) ? { xs: 0, sm: "-1rem" } : "auto",
-                    right: isEven(i) ? "auto" : { xs: 0, sm: "-1rem" },
-                    width: "1rem",
-                    height: "100%",
-                    backgroundColor: `${pallete?.[isEven(i) ? "secondary" : "primary"]?.main}`,
-                    animation: `${fillUpHeight} 0.25s ease-in forwards`,
-                    borderTopLeftRadius: isEven(i) ? "5px" : 0,
-                    borderBottomLeftRadius: isEven(i) ? "5px" : 0,
-                    borderTopRightRadius: isEven(i) ? 0 : "5px",
-                    borderBottomRightRadius: !isEven(i) ? 0 : "5px",
-                    zIndex: -1,
-                  },
-                  ".MuiTimelineDot-root": {
-                    color: `${pallete?.[!isEven(i) ? "primary" : "secondary"]?.main}`,
+                    left: isEven(i) ? 0 : "auto",
+                    right: isEven(i) ? "auto" : 0,
                     backgroundColor: "white",
+                    transition: "all 0.3s ease-in",
+                    transitionDelay: "0.5s",
                   },
-                  ".css-1hrnx5o-MuiTypography-root-MuiTimelineContent-root": {
-                    color: `${isEven(i) ? pallete?.secondary?.main : "white"}`,
+                  ":hover": {
+                    color: "white",
+                    cursor: "pointer",
+                    ".MuiTimelineSeparator-root": { position: "relative" },
+                    ".MuiTimelineDot-root:before": {
+                      width: "50rem",
+                      height: "100%",
+                      backgroundColor: `${
+                        pallete?.[!isEven(i) ? "secondary" : "primary"]?.main
+                      }`,
+                      animation: `${fillUp} 0.5s ease-in forwards`,
+                      animationDelay: "0.3s",
+                      zIndex: -1,
+                    },
+                    ".MuiTimelineDot-root:after": {
+                      position: "absolute",
+                      content: `''`,
+                      top: 0,
+                      left: isEven(i) ? { xs: 0, sm: "-1rem" } : "auto",
+                      right: isEven(i) ? "auto" : { xs: 0, sm: "-1rem" },
+                      width: "1rem",
+                      height: "100%",
+                      backgroundColor: `${
+                        pallete?.[isEven(i) ? "secondary" : "primary"]?.main
+                      }`,
+                      animation: `${fillUpHeight} 0.25s ease-in forwards`,
+                      borderTopLeftRadius: isEven(i) ? "5px" : 0,
+                      borderBottomLeftRadius: isEven(i) ? "5px" : 0,
+                      borderTopRightRadius: isEven(i) ? 0 : "5px",
+                      borderBottomRightRadius: !isEven(i) ? 0 : "5px",
+                      zIndex: -1,
+                    },
+                    ".MuiTimelineDot-root": {
+                      color: `${
+                        pallete?.[!isEven(i) ? "primary" : "secondary"]?.main
+                      }`,
+                      backgroundColor: "white",
+                    },
+                    ".css-1hrnx5o-MuiTypography-root-MuiTimelineContent-root": {
+                      color: `${
+                        isEven(i) ? pallete?.secondary?.main : "white"
+                      }`,
+                    },
                   },
-                },
-              }}
-            >
-              <TimelineSeparator>
-                <TimelineConnector />
-                <TimelineDot
-                  color="secondary"
-                  sx={{ padding: { xs: "0.6rem", mob: "0.8rem" } }}
-                >
-                  <PersonAddAlt1Icon
-                    sx={{ fontSize: { xs: "1.8rem", mob: "2.2rem" } }}
-                  />
-                </TimelineDot>
-                <TimelineConnector />
-              </TimelineSeparator>
-              <TimelineContent sx={{ py: "12px", px: 2 }}>
-                <Typography
-                  variant="h6"
-                  sx={{ fontSize: { xs: "1rem", mob: "1.1rem", sm: "1.3rem" } }}
-                  component="span"
-                >
-                  {item?.title}
-                </Typography>
-                <Typography
-                  sx={{ fontSize: { xs: "0.85rem", mob: "0.95rem", sm: "1rem" } }}
-                >
-                  {item?.subTitle}
-                </Typography>
-              </TimelineContent>
-            </TimelineItem>
-
-            )
+                }}
+              >
+                <TimelineSeparator>
+                  <TimelineConnector />
+                  <TimelineDot
+                    color={!isEven(i) ? "primary" : "secondary"}
+                    sx={{ padding: { xs: "0.6rem", mob: "0.8rem" } }}
+                  >
+                    <SvgIcon sx={{ fontSize: { xs: "1.8rem", mob: "2.2rem" } }}>
+                      {ReactHtmlParser(item.icon?.data?.attributes.path)}
+                    </SvgIcon>
+                  </TimelineDot>
+                  <TimelineConnector />
+                </TimelineSeparator>
+                <TimelineContent sx={{ py: "12px", px: 2 }}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontSize: { xs: "1rem", mob: "1.1rem", sm: "1.3rem" },
+                    }}
+                    component="span"
+                  >
+                    {item?.title}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: { xs: "0.85rem", mob: "0.95rem", sm: "1rem" },
+                    }}
+                  >
+                    {item?.subTitle}
+                  </Typography>
+                </TimelineContent>
+              </TimelineItem>
+            );
           })}
           {/* <TimelineItem
             sx={{

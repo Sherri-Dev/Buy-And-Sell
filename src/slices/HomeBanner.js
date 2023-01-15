@@ -1,20 +1,32 @@
-import { Box, TextField, Typography, alpha, Autocomplete } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Typography,
+  alpha,
+  Autocomplete,
+  SvgIcon,
+} from "@mui/material";
 import { Container } from "@mui/system";
-import React from "react";
-import SearchIcon from "@mui/icons-material/Search";
-import LocationSearchingIcon from "@mui/icons-material/LocationSearching";
+import React, { useContext } from "react";
 import Btn from "../components/shared/Btn";
 import Categories from "../components/shared/Categories";
 import { getImg } from "../helpers/formatApi";
+import ReactHtmlParser from "react-html-parser";
+import { FiltersContext } from "../contexts/filtersContext";
+import { useNavigate } from "react-router-dom";
 
 const HomeBanner = ({ content, headerHeight }) => {
+  const { state: filtersState, dispatch: dispatchFilter } =
+    useContext(FiltersContext);
+  const navigate = useNavigate();
   return (
     <Box
       component={"section"}
       sx={{
         height: "100%",
-        background:
-          `url(http://localhost:1337${getImg(content.bgImage).url}) center center/cover`,
+        background: `rgb(0,0,0, 60%) url(${process.env.REACT_APP_BACKEND_URL}${getImg(content.bgImage).url
+          }) center center/cover`,
+        backgroundBlendMode: "overlay",
       }}
     >
       <Box
@@ -96,15 +108,20 @@ const HomeBanner = ({ content, headerHeight }) => {
                       borderRight: { md: "1px solid white" },
                     }}
                   >
-                    <SearchIcon
+                    <SvgIcon
                       sx={{
                         mr: 1,
                         color: "primary.main",
                         alignSelf: "center",
                       }}
-                    />
+                    >
+                      {ReactHtmlParser(
+                        content?.searchForm?.input.icon?.data.attributes.path
+                      )}
+                    </SvgIcon>
                     <TextField
                       label={content?.searchForm?.input?.label}
+                      defaultValue={filtersState.searchText}
                       inputProps={{
                         placeholder: content?.searchForm?.input?.placeholder,
                         sx: {
@@ -120,6 +137,12 @@ const HomeBanner = ({ content, headerHeight }) => {
                           color: "white",
                         },
                       }}
+                      onChange={(e) =>
+                        dispatchFilter({
+                          type: "TEXT",
+                          payload: e.target.value,
+                        })
+                      }
                       fullWidth
                       variant="standard"
                     />
@@ -131,15 +154,26 @@ const HomeBanner = ({ content, headerHeight }) => {
                       width: "100%",
                     }}
                   >
-                    <LocationSearchingIcon
+                    <SvgIcon
                       sx={{
                         mr: 1,
                         color: "primary.main",
                         alignSelf: "center",
                       }}
-                    />
+                    >
+                      {ReactHtmlParser(
+                        content?.searchForm?.selectBox.icon?.data.attributes
+                          .path
+                      )}
+                    </SvgIcon>
                     <Autocomplete
-                      options={content?.searchForm?.selectBox?.options?.data?.map(item => item.attributes.name)}
+                      options={content?.searchForm?.selectBox?.options?.data?.map(
+                        (item) => item.attributes.city
+                      )}
+                      value={filtersState.searchLoc}
+                      onChange={(e, value) =>
+                        dispatchFilter({ type: "LOC", payload: value })
+                      }
                       renderInput={(params) => (
                         <TextField
                           {...params}
@@ -182,6 +216,9 @@ const HomeBanner = ({ content, headerHeight }) => {
                     }}
                     variant="contained"
                     type={"submit"}
+                    onClick={(e) => {
+                      navigate("/search-results")
+                    }}
                   />
                 </Box>
               </Box>

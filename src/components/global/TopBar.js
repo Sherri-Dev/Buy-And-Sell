@@ -1,6 +1,6 @@
 import React from "react";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
-import { Link as RouterLink, useLocation } from "react-router-dom";
+import { Link as RouterLink, useLocation, useParams } from "react-router-dom";
 import { Box, Link, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import { useTheme } from "@emotion/react";
@@ -10,11 +10,12 @@ const LinkRouter = (props) => <Link {...props} component={RouterLink} />;
 const TopBar = ({ sx }) => {
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter((x) => x);
+  const params = useParams();
   const theme = useTheme();
-
-  const breadcrumbNameMap = (id) => ({
-    "/search-results": " Search Results",
-    [`/${id}`]: "Ad Details / Title",
+  const breadcrumbNameMap = (slug) => ({
+    "search-results": " Search Results",
+    "ads":"Ads",
+    [`ads/${slug}`]: `${slug}`,
   });
 
   return (
@@ -30,30 +31,30 @@ const TopBar = ({ sx }) => {
       <Container>
         <Breadcrumbs
           aria-label="breadcrumb"
-          sx={{ color: "black", fontSize: { xs: "14px", sm: "16px" } }}
+          sx={{ color: "secondary.main",  fontSize: { xs: "14px", sm: "16px" } }}
         >
-          <LinkRouter underline="hover" sx={{ color: "text.secondary" }} to="/">
+          <LinkRouter underline="hover" sx={{ color: "inherit","&:hover":{color:'primary.main'} }} to="/">
             Home
           </LinkRouter>
           {pathnames.map((value, index) => {
             const last = index === pathnames.length - 1;
-            const to = `/${pathnames.slice(0, index + 1).join("/")}`;
-
+            const to = `${pathnames.slice(0, index + 1).join("/")}`;
             return last ? (
-              <Typography color="inherit" key={to} fontSize="inherit">
-                {" "}
-                {breadcrumbNameMap(1)[to]}
+              <Typography sx={{color:'gray'}} key={to} fontSize="inherit">
+                {breadcrumbNameMap(params.slug)[to]}
               </Typography>
             ) : (
               <LinkRouter
                 underline="hover"
                 color="inherit"
                 fontSize="inherit"
-                to={to}
+
+        sx={{"&:hover":{color:'primary.main'}}}
+                to={`/${to}`}
                 key={to}
               >
                 {" "}
-                {breadcrumbNameMap(1)[to]}
+                {breadcrumbNameMap(params.slug)[to]}
               </LinkRouter>
             );
           })}

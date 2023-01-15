@@ -5,12 +5,15 @@ import Ad from "../../components/global/Ad";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import ArrowForwardIosRoundedIcon from "@mui/icons-material/ArrowForwardIosRounded";
 import useSlider from "../../hooks/useSlider";
+import useFetch from "../../hooks/useFetch";
 
-const AdSlider = ({ title }) => {
+const AdSlider = ({ title, url, content, variant = 1 }) => {
+  const { data} = useFetch(!content && url);
+  content =
+    content?.category.data.attributes.ads.data || (data?.length && data);
   const adRef = useRef();
   const { sliderTranslate, handleClick, disabledForward, disabledBackward } =
-    useSlider(adRef, 3);
-
+    useSlider(adRef, content?.length || 1,16);
   return (
     <Box
       sx={{
@@ -30,7 +33,7 @@ const AdSlider = ({ title }) => {
         direction="row"
         justifyContent={"space-between"}
       >
-        <Typography variant="h6">{title}</Typography>
+        <Typography variant="h6">{content?.title || title}</Typography>
         <Stack direction={"row"} gap="0.5rem">
           <IconButton
             sx={{ fontSize: "1.3rem" }}
@@ -59,15 +62,21 @@ const AdSlider = ({ title }) => {
             gap: "1rem",
           }}
         >
-          <div style={{ flexShrink: 0, width: "100%" }} ref={adRef}>
-            <Ad variant={1} size="small" borderRadius={"3px"} elevation={0} />
-          </div>
-          <div style={{ flexShrink: 0, width: "100%" }} ref={adRef}>
-            <Ad variant={1} size="small" borderRadius={"3px"} elevation={0} />
-          </div>
-          <div style={{ flexShrink: 0, width: "100%" }} ref={adRef}>
-            <Ad variant={1} size="small" borderRadius={"3px"} elevation={0} />
-          </div>
+          {content?.map((ad) => (
+            <div
+              style={{ flexShrink: 0, width: "100%" }}
+              ref={adRef}
+              key={ad.id}
+            >
+              <Ad
+                content={ad.attributes}
+                variant={variant}
+                size="small"
+                borderRadius={"3px"}
+                elevation={0}
+              />
+            </div>
+          ))}
         </Stack>
       </Box>
     </Box>

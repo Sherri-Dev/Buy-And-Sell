@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-const useSlider = (adRef, totalSlides) => {
+const useSlider = (adRef, totalSlides,offset=0) => {
   const [sliderTranslate, setSliderTranslate] = useState(0);
   const [currentSlide, setCurrentSlide] = useState(1);
   const [disabledForward, setDisabledForward] = useState(false);
@@ -12,7 +12,7 @@ const useSlider = (adRef, totalSlides) => {
       setDisabledForward(() => currentSlide === totalSlides - 1);
       setSliderTranslate(
         () =>
-          `${Number(sliderTranslate) + Number(adRef.current.clientWidth) + 16}`
+          `${Number(sliderTranslate) + Number(adRef.current.clientWidth) + offset}`
       );
       setCurrentSlide(() => currentSlide + 1);
     } else if (currentSlide > 1 && !forward) {
@@ -20,13 +20,13 @@ const useSlider = (adRef, totalSlides) => {
       setDisabledBackward(() => currentSlide === 2);
       setSliderTranslate(
         () =>
-          `${Number(sliderTranslate) - Number(adRef.current.clientWidth) - 16}`
+          `${Number(sliderTranslate) - Number(adRef.current.clientWidth) - offset}`
       );
       setCurrentSlide(() => currentSlide - 1);
     }
   };
 
-  return { sliderTranslate, handleClick, disabledForward, disabledBackward };
+  return { sliderTranslate,setCurrentSlide, handleClick, disabledForward, disabledBackward };
 };
 
 export default useSlider;
