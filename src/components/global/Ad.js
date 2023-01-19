@@ -17,14 +17,13 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { removeComponentName } from "../../helpers/formatApi";
-import { useMemo } from "react";
+
 
 const Ad = ({ content, variant, size, borderRadius, elevation }) => {
   const isFeatured = content?.categories?.data.find(
     (ctg) => ctg.attributes.name === "Featured"
   );
-const {"related-ads":relatedAds,edito:tipsList} = getComponentsFromDZ(content.details)
+  const { "related-ads": relatedAds, edito: tipsList } = getComponentsFromDZ(content.details);
   return variant === 1 ? (
     <Card
       sx={{
@@ -46,9 +45,8 @@ const {"related-ads":relatedAds,edito:tipsList} = getComponentsFromDZ(content.de
       elevation={elevation || 5}
     >
       <CardMedia
-        image={`${process.env.REACT_APP_BACKEND_URL}${
-          getImages(content?.images, "thumbnail")[0].url
-        }`}
+        image={`${process.env.REACT_APP_BACKEND_URL}${getImages(content?.images, "thumbnail")[0].url
+          }`}
         sx={{ height: "100%", position: "relative" }}
       >
         <CardHeader
@@ -256,9 +254,8 @@ const {"related-ads":relatedAds,edito:tipsList} = getComponentsFromDZ(content.de
         }
       />
       <CardMedia
-        image={`${process.env.REACT_APP_BACKEND_URL}${
-          getImages(content?.images, "thumbnail")[0].url
-        }`}
+        image={`${process.env.REACT_APP_BACKEND_URL}${getImages(content?.images, "thumbnail")[0].url
+          }`}
         sx={{ height: "200px" }}
         component={Link}
         to={`/ads/${content?.slug}`}

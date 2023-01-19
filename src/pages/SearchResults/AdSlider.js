@@ -8,12 +8,12 @@ import useSlider from "../../hooks/useSlider";
 import useFetch from "../../hooks/useFetch";
 
 const AdSlider = ({ title, url, content, variant = 1 }) => {
-  const { data} = useFetch(!content && url);
+  const { data } = useFetch(!content && url);
   content =
-    content?.category.data.attributes.ads.data || (data?.length && data);
+    content?.ads.data || (data?.length > 0 ? data : null);
   const adRef = useRef();
   const { sliderTranslate, handleClick, disabledForward, disabledBackward } =
-    useSlider(adRef, content?.length || 1,16);
+    useSlider(adRef, content?.length || 1, 16);
   return (
     <Box
       sx={{

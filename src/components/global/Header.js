@@ -36,7 +36,7 @@ const Header = ({ setHeaderHeight, transparent }) => {
   const theme = useTheme();
 
   window.onscroll = () => {
-    if (window.scrollY > header.current.clientHeight) {
+    if (window.scrollY > header.current?.clientHeight) {
       header.current.classList.add("scrolled-show-header");
       backToTop.current.classList.add("scrolled-show-backToTop-btn");
       return;

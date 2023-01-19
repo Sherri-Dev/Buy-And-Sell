@@ -25,6 +25,7 @@ const SearchResults = ({ headerHeight }) => {
   const { data } = useFetch(
     `${process.env.REACT_APP_API_URL}/search-results?populate=deep`
   );
+
   const [mobileOpen, setMobileOpen] = useState(false);
   const { state: filtersState, dispatch: dispatchFilter } =
     useContext(FiltersContext);
@@ -119,7 +120,7 @@ const SearchResults = ({ headerHeight }) => {
             <AdSlider
               title={"Featured Ads"}
               url={`${process.env.REACT_APP_API_URL}/categories?filters[slug][$eq]=featured&populate=deep`}
-              content={data?.attributes.featuredAds}
+              content={data?.attributes?.featuredAds?.category?.data?.attributes}
             />
             <AdSlider
               title={"Recent Ads"}
@@ -187,7 +188,7 @@ const SearchResults = ({ headerHeight }) => {
             </List>
             <AdSlider
               title={"Featured Ads"}
-              content={data?.attributes.featuredAds}
+              content={data?.attributes?.featuredAds?.category?.data?.attributes}
             />
             <AdSlider
               title={"Recent Ads"}

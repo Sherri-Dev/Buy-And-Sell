@@ -94,7 +94,6 @@ const ResultsFound = ({ query, params, dispatchFilter, icon }) => {
         setIsLoading(false);
         return setErr(err);
       });
-    err && console.log(err);
   }, [pageNumber, strapiQuery]);
 
   const handleChange = (event) => {
