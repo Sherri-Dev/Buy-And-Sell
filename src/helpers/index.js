@@ -1,5 +1,5 @@
 
 export const isEven = (num) => { return !(num % 2); };
-export const getTimelineColors = (theme) => {
-
+export const getIcon = (list) => {
+    console.log(list);
 };

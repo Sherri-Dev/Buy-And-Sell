@@ -42,6 +42,7 @@ const AdModal = ({ isOpen, handleClose, content }) => {
                 onClose={() => setIsSnackBar(false)}
                 message="Copied to clibboard"
                 anchorOrigin={{ vertical: "center", horizontal: "center" }}
+                sx={{ '.css-1d9qac8-MuiPaper-root-MuiSnackbarContent-root': { backgroundColor: 'success.main' } }}
             />
         </Dialog>
     )
