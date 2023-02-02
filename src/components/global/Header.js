@@ -37,12 +37,12 @@ const Header = ({ setHeaderHeight, transparent }) => {
 
   window.onscroll = () => {
     if (window.scrollY > header.current?.clientHeight) {
-      header.current.classList.add("scrolled-show-header");
-      backToTop.current.classList.add("scrolled-show-backToTop-btn");
+      header.current?.classList.add("scrolled-show-header");
+      backToTop.current?.classList.add("scrolled-show-backToTop-btn");
       return;
     }
-    header.current.classList.remove("scrolled-show-header");
-    backToTop.current.classList.remove("scrolled-show-backToTop-btn");
+    header.current?.classList.remove("scrolled-show-header");
+    backToTop.current?.classList.remove("scrolled-show-backToTop-btn");
   };
   return (
     <>

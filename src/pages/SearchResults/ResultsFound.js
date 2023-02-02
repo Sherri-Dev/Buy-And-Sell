@@ -42,11 +42,11 @@ const ResultsFound = ({ query, params, dispatchFilter, icon }) => {
               $contains: searchText,
             },
           },
-          {
-            description: {
-              $contains: searchText,
-            },
-          },
+          // {
+          //   desc: {
+          //     $contains: searchText,
+          //   },
+          // },
         ],
         price: {
           $and: [

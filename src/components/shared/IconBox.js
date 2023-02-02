@@ -1,10 +1,11 @@
 import { Icon, IconButton, Stack, SvgIcon, Typography } from '@mui/material'
 import React, { useMemo } from 'react'
-import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import ReactHtmlParser from 'react-html-parser';
 import { useState } from 'react';
-const IconBox = ({ title = 'Phone :', desc = '453646', theme = "advertise", iconPath, icon = <LocalPhoneIcon fontSize='inherit' />, hideDesc = true }) => {
-    const [showDesc, setShowDesc] = useState(!hideDesc)
-
+const IconBox = ({ iconComp }) => {
+    const { title, desc, theme, hideDesc, isBorder, isBg, icon } = iconComp;
+    const iconPath = icon?.data?.attributes.path || icon?.path;
+    const [showDesc, setShowDesc] = useState(!hideDesc);
     const themes = useMemo(() => ({
         info: {
             bg: '#edf7ed',
@@ -15,26 +16,27 @@ const IconBox = ({ title = 'Phone :', desc = '453646', theme = "advertise", icon
             bg: '#fff9e8',
             border: '#ffc220',
             icon: '#ffc220'
-        }
+        },
+        alert: {
+            bg: '#fdebec',
+            border: '#e3262f',
+            icon: '#e3262f'
+        },
+
     }), []);
+
     return (
-        <Stack flexDirection={'row'} flexWrap='wrap' gap='15px' padding={'20px 22px'} sx={{ backgroundColor: themes[theme].bg, border: `2px dashed ${themes[theme].border}`, borderRadius: '8px', width: 'fit-content', cursor: 'pointer' }} onClick={() => setShowDesc(() => !showDesc)}>
+        <Stack flexDirection={'row'} flexWrap='wrap' gap={isBorder ? '15px' : '7px'} padding={isBorder ? '20px 22px' : '20px 0px'} sx={{ backgroundColor: isBg && themes[theme].bg, border: isBorder && `2px dashed ${themes[theme].border}`, borderRadius: '8px', width: 'fit-content', cursor: hideDesc && 'pointer' }} onClick={() => hideDesc && setShowDesc(() => !showDesc)}>
 
             {
-                iconPath ? (
+                iconPath && (
                     <SvgIcon sx={{ color: themes[theme].icon, fontSize: '28px' }}>
-
+                        {ReactHtmlParser(iconPath)}
                     </SvgIcon>
-                ) :
-                    (
-                        <Icon sx={{ color: themes[theme].icon, fontSize: '28px' }}>
-                            {icon}
-                        </Icon>
-                    )
-
+                )
             }
 
-            <Typography sx={{ color: 'black' }} fontSize='18px' fontWeight={'500'}>{title}</Typography>
+            <Typography sx={{ color: themes[theme].icon }} fontSize='18px' fontWeight={'500'}>{title}</Typography>
 
             {
                 !showDesc ? (

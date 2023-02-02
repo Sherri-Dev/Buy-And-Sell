@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useCallback, useState } from "react";
 import {
   Box,
   Card,
@@ -11,13 +11,13 @@ import {
 } from "@mui/material";
 import LocationOn from "@mui/icons-material/LocationOn";
 import IconBox from "../../components/shared/IconBox";
-import { getImages } from "../../helpers/formatApi";
-import { useCallback } from "react";
+import { getComponentsFromDZ, getImages } from "../../helpers/formatApi";
 
 
 const AdBanner = ({ content, offset }) => {
   const [value, setValue] = useState(0);
 
+  const { ['icon-box']: iconComp } = useMemo(() => getComponentsFromDZ(content?.attributes?.details));
 
   const handleChange = useCallback((event, newValue) => {
     setValue(newValue);
@@ -259,7 +259,7 @@ const AdBanner = ({ content, offset }) => {
                 <Typography color={'primary'} variant='h6' fontWeight={'500'}>{content?.attributes?.price?.tag} Price</Typography>
               </Stack>
 
-              <IconBox title={'Phone:'} desc={content?.attributes?.author?.data?.attributes?.phone} />
+              {iconComp && <IconBox iconComp={iconComp} />}
             </Box>
           </Box>
         </Stack>

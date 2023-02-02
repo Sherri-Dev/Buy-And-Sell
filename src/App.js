@@ -6,11 +6,12 @@ import Footer from "./components/global/Footer";
 import Header from "./components/global/Header";
 import { FiltersContextProvider } from "./contexts/filtersContext";
 import useCustomizer from "./hooks/useCustomizer";
+import User from "./pages/Users";
 
-const Home = lazy(() => import('./pages/Home') );
-const SearchResults = lazy(() => import('./pages/SearchResults') );
-const AdDetails = lazy(()=> import('./pages/AdDetails'));
-const NotFound = lazy(()=> import('./slices/NotFound'));
+const Home = lazy(() => import('./pages/Home'));
+const SearchResults = lazy(() => import('./pages/SearchResults'));
+const AdDetails = lazy(() => import('./pages/AdDetails'));
+const NotFound = lazy(() => import('./slices/NotFound'));
 function App() {
   const { theme: customTheme } = useCustomizer();
   const theme = createTheme({
@@ -44,53 +45,69 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <FiltersContextProvider>
-        <Suspense fallback='loading...'>
-        <Router>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <>
-                  <Header
-                    setHeaderHeight={setHeaderHeight}
-                    transparent={true}
-                  />
-                  <Home headerHeight={headerHeight} />
-                </>
-              }
-            />
-            <Route
-              path="/search-results"
-              element={
-                <>
-                  <Header
-                    setHeaderHeight={setHeaderHeight}
-                    transparent={false}
-                  />
-                  <SearchResults headerHeight={headerHeight} />
-                </>
-              }
-            />
-            <Route path="ads" element={ <Navigate to='/search-results' />}/>
-            <Route
-              path="/ads/:slug"
-              element={
-                <>
-                  <Header
-                    setHeaderHeight={setHeaderHeight}
-                    transparent={false}
-                  />
-                  <AdDetails headerHeight={headerHeight} />
-                </>
-              }
-            />
-            <Route path= "*" element={<><Header
-                    setHeaderHeight={setHeaderHeight}
-                    transparent={false}
-                  /><NotFound/></>} />
-          </Routes>
-          <Footer />
-        </Router>
+        <Suspense>
+          <Router>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <>
+                    <Header
+                      setHeaderHeight={setHeaderHeight}
+                      transparent={true}
+                    />
+                    <Home headerHeight={headerHeight} />
+                  </>
+                }
+              />
+              <Route
+                path="/search-results"
+                element={
+                  <>
+                    <Header
+                      setHeaderHeight={setHeaderHeight}
+                      transparent={false}
+                    />
+                    <SearchResults headerHeight={headerHeight} />
+                  </>
+                }
+              />
+              <Route path="ads" element={<Navigate to='/search-results' />} />
+              <Route
+                path="/ads/:slug"
+                element={
+                  <>
+                    <Header
+                      setHeaderHeight={setHeaderHeight}
+                      transparent={false}
+                    />
+                    <AdDetails headerHeight={headerHeight} />
+                  </>
+                }
+              />
+              <Route
+                path="/users/:slug"
+                element={
+                  <>
+                    <Header
+                      setHeaderHeight={setHeaderHeight}
+                      transparent={false}
+                    />
+                    <User headerHeight={headerHeight} />
+                  </>
+                }
+              />
+              <Route path="/404" element={<><Header
+                setHeaderHeight={setHeaderHeight}
+                transparent={false}
+              /><NotFound /></>} />
+              <Route path="*" element={<><Header
+                setHeaderHeight={setHeaderHeight}
+                transparent={false}
+              /><NotFound /></>} />
+            </Routes>
+            <Footer />
+          </Router>
         </Suspense>
       </FiltersContextProvider>
     </ThemeProvider>

@@ -7,7 +7,6 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { IconButton, Snackbar, Stack, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { Box } from '@mui/system';
 const AdModal = ({ isOpen, handleClose, content }) => {
     const [isSnackBar, setIsSnackBar] = useState(false)
     const handleCopy = () => {

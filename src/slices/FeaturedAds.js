@@ -11,7 +11,7 @@ const FeaturedAds = ({ content: { category, title } }) => {
 
   const btnRef = useRef(null);
 
-  const { data, isLoading, hasMore } = useLoadMore({ query: 'ads', btnRef, pageSize: 1 })
+  const { data, isLoading, hasMore } = useLoadMore({ query: 'ads', btnRef, pageSize: 6 })
   return (
     <Box component="section" sx={{ padding: { xs: "40px 0", sm: "60px 0" } }}>
       <Container>

@@ -116,14 +116,14 @@ const HomeBanner = ({ content, headerHeight }) => {
                       }}
                     >
                       {ReactHtmlParser(
-                        content?.searchForm?.input.icon?.data.attributes.path
+                        content?.searchForm?.inputs[0]?.icon?.data?.attributes.path
                       )}
                     </SvgIcon>
                     <TextField
-                      label={content?.searchForm?.input?.label}
+                      label={content?.searchForm?.inputs[0]?.label}
                       defaultValue={filtersState.searchText}
                       inputProps={{
-                        placeholder: content?.searchForm?.input?.placeholder,
+                        placeholder: content?.searchForm?.inputs[0]?.placeholder,
                         sx: {
                           height: "100%",
                           color: "white",
