@@ -1,10 +1,8 @@
-import { Grid } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import React from 'react'
-import Ad from '../../components/global/Ad'
 import UserAd from './UserAd';
 
 const UserAds = ({ ads }) => {
-    console.log(ads);
     return (
         <Grid container spacing={{ xs: 2, md: 3 }}>
             {ads?.map((ad) => {

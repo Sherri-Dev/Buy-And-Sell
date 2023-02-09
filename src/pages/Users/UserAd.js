@@ -1,20 +1,20 @@
-import { Button, Card, CardContent, CardHeader, CardMedia, IconButton, Stack, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, CardHeader, CardMedia, IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import React from 'react'
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import StarIcon from '@mui/icons-material/Star';
 import AccessTimeIcon from "@mui/icons-material/AccessTime"
 import LocationOnIcon from "@mui/icons-material/LocationOn"
+import VisibilityIcon from "@mui/icons-material/Visibility"
 import { Link } from 'react-router-dom';
 const UserAd = ({ adData }) => {
     const isFeatured = adData?.categories?.find(
         (ctg) => ctg.name === "Featured"
     );
-    console.log(adData);
     return (
-        <Card sx={{ display: 'flex' }}>
+        <Card sx={{ display: 'flex', flexDirection: { xs: "column", sm: "row", md: "column", lg: "row" } }}>
             <CardMedia image={`${process.env.REACT_APP_BACKEND_URL}${adData?.images[0].url
                 }`}
-                sx={{ flex: 1, position: 'relative' }}>
+                sx={{ flex: 1, position: 'relative', minHeight: "180px" }}>
                 <CardHeader avatar={
                     isFeatured && (
                         <Typography
@@ -60,18 +60,30 @@ const UserAd = ({ adData }) => {
                     } />
             </CardMedia>
             <CardContent sx={{ flex: 1 }}>
-                <Stack flexDirection={"row"} gap="10px" >
-                    {
-                        adData?.categories?.map((cat) =>
-                        (<Typography
-                            variant="h6"
-                            sx={{ fontSize: "1rem", color: "gray", fontWeight: "normal" }}
-                            key={cat.id}
-                        >
-                            {cat.name}
-                        </Typography>
-                        ))
-                    }
+                <Stack flexDirection={"row"} justifyContent="space-between">
+                    <Stack flexDirection={"row"} gap="10px" flexWrap={"wrap"} >
+                        {
+                            adData?.categories?.map((cat) =>
+                            (<Typography
+                                variant="h6"
+                                sx={{ fontSize: "1rem", color: "gray", fontWeight: "normal" }}
+                                key={cat.id}
+                            >
+                                {cat.name}
+                            </Typography>
+                            ))
+                        }
+                    </Stack>
+                    <Tooltip
+                        title="340 views"
+                        arrow
+                        placement="top"
+                        leaveDelay={1500}
+                        enterTouchDelay={0}
+                        sx={{ cursor: "pointer" }}
+                    >
+                        <VisibilityIcon sx={{ color: "gray" }} />
+                    </Tooltip>
                 </Stack>
                 <Typography
                     component={Link}
@@ -112,41 +124,44 @@ const UserAd = ({ adData }) => {
                         {new Date(adData?.publishedAt).toDateString()}
                     </Typography>
                 </Stack>
-                <Stack flexDirection={"row"} justifyContent={"space-between"} alignItems={"center"} mt={"30px"}>
-                    <Typography
-                        variant="subtitle1"
-                        color="primary"
-                        sx={{
-                            fontSize: { xs: "17px", sm: "19px" },
-                        }}
-                    >
-                        {`${adData?.price?.currency} ${adData?.price?.value} (${adData?.price?.tag})`}
-                    </Typography>
+                <Stack flexDirection={"row"} flexWrap="wrap" gap="15px" justifyContent={"space-between"} alignItems={"flex-start"} mt={"20px"}>
+                    <Box flexDirection={"column"} justifyContent={"space-between"}>
+                        <Typography
+                            variant="subtitle1"
+                            color="primary"
+                            sx={{
+                                fontSize: { xs: "17px", sm: "19px" },
+                            }}
+                        >
+                            {`${adData?.price?.currency} ${adData?.price?.value} (${adData?.price?.tag})`}
+                        </Typography>
+                        <Stack
+                            direction={"row"}
+                            alignItems="center"
+                            spacing={1}
+                            sx={{ color: "gray", position: "relative" }}
+                        >
+                            <LocationOnIcon
+                                sx={{ fontSize: "1.5rem" }}
+                            />
+                            <Typography
+                                variant="subtitle1"
+                                sx={{
+                                    fontWeight: "normal",
+                                    fontSize: { xs: "16px", sm: "18px" },
+                                }}
+                                noWrap
+                            >
+                                {adData?.location?.address}
+                            </Typography>
+                        </Stack>
+                    </Box>
                     <Button component={Link}
                         to={`/ads/${adData?.slug}`} sx={{ py: "10px" }} variant="contained">
                         View Details
                     </Button>
                 </Stack>
-                <Stack
-                    direction={"row"}
-                    alignItems="center"
-                    spacing={1}
-                    sx={{ color: "gray", mt: "0.7rem", position: "relative" }}
-                >
-                    <LocationOnIcon
-                        sx={{ fontSize: "1.5rem" }}
-                    />
-                    <Typography
-                        variant="subtitle1"
-                        sx={{
-                            fontWeight: "normal",
-                            fontSize: { xs: "16px", sm: "18px" },
-                        }}
-                        noWrap
-                    >
-                        {adData?.location?.address}
-                    </Typography>
-                </Stack>
+
             </CardContent>
         </Card>
     )

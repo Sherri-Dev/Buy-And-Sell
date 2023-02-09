@@ -17,6 +17,7 @@ import NotFound from "../../slices/NotFound";
 import qs from "qs";
 import Heading from "../../components/shared/Heading";
 import Ad from "../../components/global/Ad";
+import Loading from "../../slices/Loading";
 
 const ResultsFound = ({ query, params, dispatchFilter, icon }) => {
   const [selectVal, setSelectVal] = useState("publishedAt:desc");
@@ -138,42 +139,44 @@ const ResultsFound = ({ query, params, dispatchFilter, icon }) => {
           backgroundColor: "#eee",
           pb: { xs: "20px", sm: "30px", md: "50px" },
           flexGrow: 1,
+          position: "relative"
         }}
       >
-        {data?.length ? (
-          <Container>
-            <Toolbar
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                flexWrap: "wrap",
-                gap: "0.8rem",
-                paddingBlock: "0.5rem",
-                mb: "1.5rem",
-              }}
-            >
-              {filteredCtgs.map((ctg, i) => (
-                <Chip
-                  key={i}
-                  color="primary"
-                  label={ctg}
-                  size="medium"
-                  sx={{
-                    fontSize: { xs: "0.9rem", sm: "1.025rem" },
-                    padding: { xs: "1rem 0rem", sm: "1.05rem 0.1rem" },
-                  }}
-                  onDelete={(e) =>
-                    dispatchFilter({
-                      type: "CTG",
-                      payload: filteredCtgs.filter(
-                        (ctg, i) =>
-                          ctg !== e.currentTarget.previousSibling.innerText
-                      ),
-                    })
-                  }
-                />
-              ))}
-            </Toolbar>
+        <Container>
+          <Toolbar
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: "0.8rem",
+              paddingBlock: "0.5rem",
+              mb: "1.5rem",
+            }}
+          >
+            {filteredCtgs.map((ctg, i) => (
+              <Chip
+                key={i}
+                color="primary"
+                label={ctg}
+                size="medium"
+                sx={{
+                  fontSize: { xs: "0.9rem", sm: "1.025rem" },
+                  padding: { xs: "1rem 0rem", sm: "1.05rem 0.1rem" },
+                }}
+                onDelete={(e) =>
+                  dispatchFilter({
+                    type: "CTG",
+                    payload: filteredCtgs.filter(
+                      (ctg, i) =>
+                        ctg !== e.currentTarget.previousSibling.innerText
+                    ),
+                  })
+                }
+              />
+            ))}
+          </Toolbar>
+
+          {data?.length > 0 && !isLoading ? (<>
             <Heading mb={{ xs: "50px", sm: "70px" }} title="Found Ads " />
             <Grid
               container
@@ -217,12 +220,13 @@ const ResultsFound = ({ query, params, dispatchFilter, icon }) => {
                 },
               }}
             />
-          </Container>
-        ) : !isLoading ? (
-          <NotFound icon={icon} />
-        )
-          : (<Typography>Loading...</Typography>)
-        }
+          </>)
+            : isLoading ? (<Loading rmBg size={10} />)
+              : !isLoading ? (<NotFound icon={icon} />) : null
+          }
+
+        </Container>
+
       </Box>
     </Box>
   );

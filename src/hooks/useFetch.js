@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 const useFetch = (url, options = { method: "GET" }) => {
   const [apiRes, setApiRes] = useState([]);
   const [err, setErr] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetch(url, options)

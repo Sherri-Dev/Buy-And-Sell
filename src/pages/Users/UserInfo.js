@@ -1,11 +1,15 @@
-import { Avatar, Divider, Stack, TextField, Typography } from '@mui/material';
+import { Avatar, Divider, Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { useMemo } from 'react'
+import React from 'react'
 import IconBox from '../../components/shared/IconBox';
-import { getComponentsFromDZ, getImg } from '../../helpers/formatApi';
+import { getImg } from '../../helpers/formatApi';
 import ReactHtmlParser from 'react-html-parser'
+import Form from '../../components/global/Form';
+import useForm from '../../hooks/useForm';
 
 const UserInfo = ({ user }) => {
+    const { formData } = useForm("contact-form")
+
     return (
         <Box sx={{ backgroundColor: 'white', py: '20px', borderRadius: '8px', border: '1px solid lightgrey' }}>
             <Box >
@@ -37,14 +41,16 @@ const UserInfo = ({ user }) => {
                     <Divider />
                 </>)
                 )}
-                <Typography variant='h6' component={'h2'} fontWeight='600' mt={'30px'} mb='10px' >
+                <Typography variant='h6' component={'h2'} fontWeight='600' mt={'25px'} mb='10px' >
                     Introduction
                 </Typography>
                 <Typography >
                     {ReactHtmlParser(user?.intro)}
                 </Typography>
             </Box>
-
+            <Box sx={{ px: "20px", mt: "10px" }}>
+                <Form formData={formData} />
+            </Box>
         </Box>
     )
 }

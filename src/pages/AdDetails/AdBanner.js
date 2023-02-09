@@ -18,7 +18,7 @@ const AdBanner = ({ content, offset }) => {
   const [value, setValue] = useState(0);
 
   const { ['icon-box']: iconComp } = useMemo(() => getComponentsFromDZ(content?.attributes?.details));
-
+  console.log(iconComp);
   const handleChange = useCallback((event, newValue) => {
     setValue(newValue);
   }, []);

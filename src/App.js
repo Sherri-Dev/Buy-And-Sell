@@ -6,12 +6,14 @@ import Footer from "./components/global/Footer";
 import Header from "./components/global/Header";
 import { FiltersContextProvider } from "./contexts/filtersContext";
 import useCustomizer from "./hooks/useCustomizer";
-import User from "./pages/Users";
+import Loading from "./slices/Loading";
 
 const Home = lazy(() => import('./pages/Home'));
 const SearchResults = lazy(() => import('./pages/SearchResults'));
 const AdDetails = lazy(() => import('./pages/AdDetails'));
 const NotFound = lazy(() => import('./slices/NotFound'));
+const User = lazy(() => import("./pages/Users"));
+
 function App() {
   const { theme: customTheme } = useCustomizer();
   const theme = createTheme({
@@ -45,7 +47,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <FiltersContextProvider>
-        <Suspense>
+        <Suspense fallback={<Loading />}>
           <Router>
             <Routes>
               <Route

@@ -104,7 +104,8 @@ const Header = ({ setHeaderHeight, transparent }) => {
                           backgroundColor: `${link?.themeSelector?.theme}.dark`,
                         },
                       }}
-                      href={link.href}
+                      LinkComponent={Link}
+                      to={link.href}
                       target={link.target}
                     >
                       <SvgIcon
@@ -123,11 +124,8 @@ const Header = ({ setHeaderHeight, transparent }) => {
                       borderRadius: "999px",
                       gap: 0,
                     }}
-                    startIcon={
-                      <SvgIcon sx={{ mr: "-6px" }}>
-                        {ReactHtmlParser(link.icon?.data?.attributes.path)}
-                      </SvgIcon>
-                    }
+                    iconPos={link?.iconPos}
+                    iconPath={link.icon?.data?.attributes.path}
                     variant="contained"
                   />
                 );

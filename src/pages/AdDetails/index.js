@@ -6,6 +6,8 @@ import AdContent from "./AdContent";
 import { useParams } from "react-router-dom";
 import qs from 'qs';
 import useFetch from "../../hooks/useFetch";
+import NotFound from "../../slices/NotFound";
+import Loading from "../../slices/Loading";
 
 const AdDetails = ({ headerHeight }) => {
   const { slug } = useParams();
@@ -26,6 +28,11 @@ const AdDetails = ({ headerHeight }) => {
     setContent(data[0])
   }, [data]);
 
+  if (!isLoading && err) {
+    return <NotFound />
+  } else if (isLoading) {
+    return <Loading />
+  }
 
   let offset = '5rem'
 
