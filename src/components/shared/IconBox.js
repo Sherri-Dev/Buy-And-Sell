@@ -2,7 +2,7 @@ import { Icon, IconButton, Stack, SvgIcon, Typography } from '@mui/material'
 import React, { useMemo } from 'react'
 import ReactHtmlParser from 'react-html-parser';
 import { useState } from 'react';
-const IconBox = ({ iconComp }) => {
+const IconBox = ({ iconComp, forceBorder }) => {
     const { title, desc, theme, hideDesc, isBorder, isBg, icon } = iconComp;
     const iconPath = icon?.data?.attributes.path || icon?.path;
     const [showDesc, setShowDesc] = useState(!hideDesc);
@@ -26,7 +26,7 @@ const IconBox = ({ iconComp }) => {
     }), []);
 
     return (
-        <Stack flexDirection={'row'} flexWrap='wrap' gap={isBorder ? '15px' : '7px'} padding={isBorder ? '20px 22px' : '20px 0px'} sx={{ backgroundColor: isBg && themes[theme].bg, border: isBorder && `2px dashed ${themes[theme].border}`, borderRadius: '8px', width: 'fit-content', cursor: hideDesc && 'pointer' }} onClick={() => hideDesc && setShowDesc(() => !showDesc)}>
+        <Stack flexDirection={'row'} flexWrap='wrap' gap={isBorder || forceBorder ? '15px' : '7px'} padding={isBorder || forceBorder ? '20px 22px' : '20px 0px'} sx={{ backgroundColor: isBg && themes[theme].bg, border: isBorder || forceBorder && `2px dashed ${themes[theme].border}`, borderRadius: '8px', width: 'fit-content', cursor: hideDesc && 'pointer' }} onClick={() => hideDesc && setShowDesc(() => !showDesc)}>
 
             {
                 iconPath && (

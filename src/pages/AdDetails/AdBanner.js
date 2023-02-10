@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Box,
   Card,
@@ -11,14 +11,13 @@ import {
 } from "@mui/material";
 import LocationOn from "@mui/icons-material/LocationOn";
 import IconBox from "../../components/shared/IconBox";
-import { getComponentsFromDZ, getImages } from "../../helpers/formatApi";
+import { getImages } from "../../helpers/formatApi";
 
 
 const AdBanner = ({ content, offset }) => {
   const [value, setValue] = useState(0);
-
-  const { ['icon-box']: iconComp } = useMemo(() => getComponentsFromDZ(content?.attributes?.details));
-  console.log(iconComp);
+  const author = content?.attributes.author?.data.attributes
+  const iconComp = author?.iconBoxes.find(box => box.title === "Phone")
   const handleChange = useCallback((event, newValue) => {
     setValue(newValue);
   }, []);
@@ -259,7 +258,7 @@ const AdBanner = ({ content, offset }) => {
                 <Typography color={'primary'} variant='h6' fontWeight={'500'}>{content?.attributes?.price?.tag} Price</Typography>
               </Stack>
 
-              {iconComp && <IconBox iconComp={iconComp} />}
+              {iconComp && <IconBox iconComp={iconComp} forceBorder />}
             </Box>
           </Box>
         </Stack>

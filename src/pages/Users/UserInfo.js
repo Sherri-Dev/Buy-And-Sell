@@ -9,7 +9,7 @@ import useForm from '../../hooks/useForm';
 
 const UserInfo = ({ user }) => {
     const { formData } = useForm("contact-form")
-
+    const soldAds = user?.ads.filter(ad => ad.isSold)
     return (
         <Box sx={{ backgroundColor: 'white', py: '20px', borderRadius: '8px', border: '1px solid lightgrey' }}>
             <Box >
@@ -18,7 +18,7 @@ const UserInfo = ({ user }) => {
                 <Stack flexDirection={'row'} mt='20px'>
                     <Box sx={{ textAlign: 'center', backgroundColor: '#fdebec', flex: 1, p: '20px' }}>
                         <Typography fontSize='24px' sx={{ color: 'danger.main' }} fontWeight='600'>
-                            0
+                            {soldAds?.length}
                         </Typography>
                         <Typography fontSize='20px' fontWeight='500' >
                             Ad Sold
@@ -26,7 +26,7 @@ const UserInfo = ({ user }) => {
                     </Box>
                     <Box sx={{ textAlign: 'center', backgroundColor: '#ebf6fc', flex: 1, p: '20px' }}>
                         <Typography fontSize='24px' sx={{ color: 'info.main' }} fontWeight='600'>
-                            9
+                            {user?.ads?.length}
                         </Typography>
                         <Typography fontSize='20px' fontWeight='500'>
                             Total Listings

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useRef } from "react";
 import { IconButton, InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { FiltersContext } from "../../contexts/filtersContext";
@@ -7,28 +7,14 @@ import { Box } from "@mui/system";
 const SearchBox = ({ type }) => {
   const { state: filtersState, dispatch: dispatchFilter } =
     useContext(FiltersContext);
-  const textInpRef = useRef(null);
-  const locInpRef = useRef(null);
-  const handleChange = (e) => {
-    type === "text"
-      ? textInpRef.current.value = e.target.value
-      : locInpRef.current.value = e.target.value;
-  };
+  const textInpRef = useRef({ current: { value: filtersState.searchText } });
+  const locInpRef = useRef({ current: { value: filtersState.searchLoc } });
   const handleSubmit = (e) => {
     e.preventDefault();
     type === "text"
       ? dispatchFilter({ type: "TEXT", payload: textInpRef.current.value })
       : dispatchFilter({ type: "LOC", payload: locInpRef.current.value });
-    console.log(filtersState)
   }
-  useEffect(() => {
-    if (type === "text" && textInpRef.current) {
-      textInpRef.current.value = filtersState.searchText;
-    } else if (locInpRef.current) {
-      locInpRef.current.value = filtersState.searchLoc
-    }
-
-  }, [])
   return (
     <Box component="form" onSubmit={handleSubmit}>
       <TextField
@@ -36,9 +22,7 @@ const SearchBox = ({ type }) => {
         sx={{ width: "100%" }}
         inputRef={type === "text" ? textInpRef : locInpRef}
         InputProps={{
-          onChange: handleChange,
-
-          value: type === "text" ? textInpRef.current?.value : textInpRef.current?.value,
+          placeholder: type === "text" ? filtersState.searchText : filtersState.searchLoc,
           sx: { paddingRight: "0px", height: "2.8rem" },
           endAdornment: (
             <InputAdornment

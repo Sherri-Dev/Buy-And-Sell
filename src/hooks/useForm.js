@@ -12,7 +12,7 @@ const useForm = ({ slug }) => {
     const { data } = useFetch(`${process.env.REACT_APP_API_URL}/forms/?${strapiQuery}`);
     const formData = data?.length && data[0];
     return (
-        { formData: formData?.attributes?.form, slug: formData?.attributes?.slug }
+        { formData: formData?.attributes, slug: formData?.attributes?.slug }
     )
 }
 

@@ -1,36 +1,40 @@
 import { Slider, Stack, TextField, Typography } from "@mui/material";
-import { useContext } from "react";
+import { Box } from "@mui/system";
+import { useContext, useState } from "react";
 import Btn from "../../components/shared/Btn";
 import { FiltersContext } from "../../contexts/filtersContext";
 
 const RangeSlider = () => {
   const min = 0;
   const max = 10000;
+  const [minVal, setMinVal] = useState(min)
+  const [maxVal, setMaxVal] = useState(max)
   const { state: filtersState, dispatch: dispatchValue } =
     useContext(FiltersContext);
   const handleChange = (event, newValue) => {
-    dispatchValue({ type: "PRICE", payload: newValue });
+    setMinVal(newValue[0]);
+    setMaxVal(newValue[1]);
   };
 
   const handleInputChange = (e) => {
     switch (e.target.id) {
       case "minInput":
-        dispatchValue({ type: "PRICE", payload: [Number(e.target.value), filtersState.priceRange[1]] });
+        setMinVal(Number(e.target.value));
         break;
       case "maxInput":
-        dispatchValue({ type: "PRICE", payload: [filtersState.priceRange[0], Number(e.target.value)] });
+        setMaxVal(Number(e.target.value));
         break;
       default:
         break;
     }
   };
 
-  const handleBlur = () => {
-    if (filtersState.priceRange[0] > filtersState.priceRange[1]) {
-      dispatchValue({ type: "PRICE", payload: [filtersState.priceRange[1], filtersState.priceRange[0]] });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (minVal !== filtersState.priceRange[0] || maxVal !== filtersState.priceRange[1]) {
+      dispatchValue({ type: "PRICE", payload: [minVal, maxVal] });
     }
-  };
-
+  }
   return (
     <>
       <Typography align="left" sx={{ mb: "10px" }}>
@@ -38,7 +42,7 @@ const RangeSlider = () => {
       </Typography>{" "}
       <Slider
         getAriaLabel={() => "Price Range Slider"}
-        value={filtersState.priceRange}
+        value={[minVal, maxVal]}
         onChange={handleChange}
         valueLabelDisplay="auto"
         min={min}
@@ -77,50 +81,53 @@ const RangeSlider = () => {
           },
         }}
       />
-      <Stack
-        gap="0.5rem"
-        direction={"row"}
-        alignItems="center"
-        sx={{ mt: "0.5rem" }}
-      >
-        <TextField
-          id="minInput"
-          value={filtersState.priceRange[0]}
-          size="small"
-          onChange={handleInputChange}
-          onBlur={handleBlur}
-          inputProps={{
-            min: min,
-            max: max,
-            type: "number",
-            "aria-labelledby": "input-slider",
+      <Box component="form"
+        onSubmit={handleSubmit} sx={{ mt: "0.5rem" }}>
+        <Stack
+          gap="0.5rem"
+          direction={"row"}
+          alignItems="center"
+
+        >
+          <TextField
+            id="minInput"
+            value={minVal}
+            size="small"
+            onChange={handleInputChange}
+            inputProps={{
+              min: min,
+              max: max,
+              type: "number",
+              "aria-labelledby": "input-slider",
+            }}
+          />
+          <Typography component={"span"}>-</Typography>
+          <TextField
+            id="maxInput"
+            value={maxVal}
+            size="small"
+            onChange={handleInputChange}
+            inputProps={{
+              min: min,
+              max: max,
+              type: "number",
+              "aria-labelledby": "input-slider",
+            }}
+          />
+        </Stack>
+        <Btn
+          text="Search"
+          variant="contained"
+          sx={{
+            mt: "1rem",
+            display: "block",
+            fontSize: "0.9rem",
+            py: "0.5rem",
           }}
+          type="submit"
         />
-        <Typography component={"span"}>-</Typography>
-        <TextField
-          id="maxInput"
-          value={filtersState.priceRange[1]}
-          size="small"
-          onChange={handleInputChange}
-          onBlur={handleBlur}
-          inputProps={{
-            min: min,
-            max: max,
-            type: "number",
-            "aria-labelledby": "input-slider",
-          }}
-        />
-      </Stack>
-      <Btn
-        text="Search"
-        variant="contained"
-        sx={{
-          mt: "1rem",
-          display: "block",
-          fontSize: "0.9rem",
-          py: "0.5rem",
-        }}
-      />
+      </Box>
+
     </>
   );
 };

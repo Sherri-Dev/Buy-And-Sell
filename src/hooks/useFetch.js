@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const useFetch = (url, options = { method: "GET" }) => {
+const useFetch = (url, onlyFirst, options = { method: "GET" }) => {
   const [apiRes, setApiRes] = useState([]);
   const [err, setErr] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -26,7 +26,7 @@ const useFetch = (url, options = { method: "GET" }) => {
       });
   }, [url]);
 
-  return { data: apiRes, err, isLoading };
+  return { data: onlyFirst ? apiRes?.length && apiRes[0] : apiRes, err, isLoading };
 };
 
 export default useFetch;

@@ -6,8 +6,9 @@ import Footer from "./components/global/Footer";
 import Header from "./components/global/Header";
 import { FiltersContextProvider } from "./contexts/filtersContext";
 import useCustomizer from "./hooks/useCustomizer";
+import useFetch from "./hooks/useFetch";
+import Page from "./pages/Page";
 import Loading from "./slices/Loading";
-
 const Home = lazy(() => import('./pages/Home'));
 const SearchResults = lazy(() => import('./pages/SearchResults'));
 const AdDetails = lazy(() => import('./pages/AdDetails'));
@@ -99,6 +100,8 @@ function App() {
                   </>
                 }
               />
+
+              <Route path="/:slug" element={<Page></Page>} />
               <Route path="/404" element={<><Header
                 setHeaderHeight={setHeaderHeight}
                 transparent={false}

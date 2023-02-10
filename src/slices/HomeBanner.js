@@ -24,7 +24,8 @@ const HomeBanner = ({ content, headerHeight }) => {
   const locRef = useRef(null);
 
   const navigate = useNavigate();
-  const { inputs, selectBox, submitBtn } = content.form?.data?.attributes?.form;
+  const { inputs, selectLoc: selectBox, links } = content.form?.data?.attributes;
+  const submitBtn = links[0]
   const handleSubmit = useCallback((e) => {
     e.preventDefault();
     dispatchFilter({
@@ -173,7 +174,7 @@ const HomeBanner = ({ content, headerHeight }) => {
                       }}
                     >
                       {ReactHtmlParser(
-                        selectBox.icon?.data?.attributes
+                        selectBox?.icon?.data?.attributes
                           .path
                       )}
                     </SvgIcon>

@@ -98,7 +98,9 @@ const ResultsFound = ({ query, params, dispatchFilter, icon }) => {
   }, [pageNumber, strapiQuery]);
 
   const handleChange = (event) => {
-    setSelectVal(event.target.value)
+    setIsLoading(true)
+    setSelectVal(event.target.value);
+
   };
 
   return (

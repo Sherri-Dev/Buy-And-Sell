@@ -3,8 +3,8 @@ import useFetch from "../hooks/useFetch";
 import Loading from "../slices/Loading";
 import { getContent, removeComponentName } from "./formatApi";
 
-const LoadPage = ({ url, schema, props }) => {
-  const { data, err, isLoading } = useFetch(url);
+const LoadPage = ({ url, schema, props, sluggified }) => {
+  const { data, err, isLoading } = useFetch(url, sluggified);
   const dataWithoutCompName = removeComponentName(data?.attributes?.content);
   return !isLoading && !err ? (
     dataWithoutCompName?.map((item, index) => (
